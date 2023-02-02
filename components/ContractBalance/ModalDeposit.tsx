@@ -75,7 +75,7 @@ const ModalDeposit = (props : any) => {
         }
         catch (e : any)
         {
-            console.error(e)
+            console.error(e.message)
             if (e.data?.message) { setPending(""); setError(`Error: ${e.data?.message}`);return; }
             if (e.message) { setPending(""); setError(`Error: ${e.message}`); }
         }
@@ -91,30 +91,30 @@ const ModalDeposit = (props : any) => {
             </Modal.Header>
             <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center' >
                 {error &&
-                  <View  flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='3' display={'flex'} w='90%'>
+                  <View  flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='3' display={'flex'} w='95%'>
                     <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='sm' mr='2'/>
-                    <Text color="white" fontSize={'xs'} numberOfLines={5}>{error}</Text>
+                    <Text color="white" fontSize={'xs'} numberOfLines={2}>{error}</Text>
                   </View>
                 }
                 {!success && pending &&
-                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='3'>
+                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='3' w='95%'>
                     <Icon as={FontAwesome} name="info-circle" color='rgb(32,27,64)'  size='sm' mr='2'/>
                     <Text color="white" fontSize={'xs'}>{pending}</Text>
                   </View>
                 }
                 {success &&
-                  <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='3'>
+                  <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='3' w='95%'>
                     <Icon as={FontAwesome} name="check-circle" color='#59b819' size='2xl' mr='2'/>
-                    <Text color='white' fontSize={'xs'}>Deposit successfully completed !
-                      <br/>Transaction hash : <Link href={`https://etherscan.com/tx/${success}`}>{success}</Link></Text>
+                    <Text color='white' fontSize={'sm'}>Deposit successfully completed !
+                      <br/>Transaction hash : <Link href={`https://etherscan.com/tx/${success}`} isUnderlined={false} _text={{fontSize:'xs'}} isExternal>{success}</Link></Text>
                   </View>
                 }
               
-                <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="90%">
+                <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="95%">
                   {/* <Text color="white" fontSize={"xl"} ml="5">{amountDeposit} GLQ</Text> */}
                   <Input color='white' value={amountDeposit} fontSize='xl' variant={'unstyled'} bg='transparent' size='sm' onChangeText={handleChange} flex='7'/>
                   <HStack flex='3' justifyContent={'right'} alignItems='center'>
-                      <Text textAlign={'center'} color='white' fontSize="sm" bg='transparent' mr='2'>GLQ</Text>
+                      <Text textAlign={'center'} color='white' fontSize="xl" bg='transparent' mr='2'>GLQ</Text>
                       <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
                         <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="5"
                         icon={<Icon as={Ionicons} name="caret-up" /> } 

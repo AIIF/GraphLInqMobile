@@ -85,34 +85,34 @@ const ModalWithdraw = (props:any) => {
             <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center'>
               <Stack m='1'>
                 {error &&
-                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1' display={'flex'} w='90%'>
+                  <View flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1' mx='3' w='95%'>
                     <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='md' mr='2'/>
-                    <Text color="white" fontSize={'sm'} numberOfLines={5}>{error}</Text>
+                    <Text color="white" fontSize={'sm'} numberOfLines={2}>{error}</Text>
                   </View>
                 }
                 {!success && pending &&
-                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1' mx='3' w='95%'>
                     <Icon as={FontAwesome} name="info-circle" color='rgb(32,27,64)' size='md' mr='2'/>
                     <Text color="white" fontSize={'sm'}>{pending}</Text>
                   </View>
                 }
                 {success &&
-                  <View textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                  <View textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='1' mx='3' w='95%'>
                     <Icon as={FontAwesome} name="check-circle" color='#59b819' size='md' mr='2'/>
-                    <Text color='white'>Deposit successfully completed ! </Text>
-                    <Text color='white'><small>Transaction hash : <a href={`https://etherscan.com/tx/${success}`} target="_blank">{success}</a></small></Text>
+                    <Text color='white' fontSize={'sm'}>Deposit successfully completed ! </Text>
+                    <Text color='white' fontSize='sm'>Transaction hash : <Link href={`https://etherscan.com/tx/${success}`} isExternal isUnderlined={false} _text={{fontSize:'xs'}}>{success}</Link></Text>
                   </View>
                 }
-                <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' m='3'>
+                <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' m='3'  w='95%'>
                   <Icon as={FontAwesome} name="info-circle" color='darkBlue.900' size='2xl'/>
                   <Text color='white'>You currently have <b>{dueBalance} GLQ</b> of execution cost from executed graphs to burn.</Text>
                 </View>
 
-                <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="90%">
+                <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="95%">
                   {/* <Text color="white" fontSize={"xl"} ml="5">{amountWithdraw} GLQ</Text> */}
                   <Input color='white' value={amountWithdraw} fontSize='xl' variant={'unstyled'} bg='transparent' size='sm' flex='7' onChangeText={handleChange}/>
                   <HStack flex='3' justifyContent={'right'} alignItems='center'>
-                    <Text textAlign={'center'} color='white' fontSize="sm" bg='transparent' mr='2'>GLQ</Text>
+                    <Text textAlign={'center'} color='white' fontSize="xl" bg='transparent' mr='2'>GLQ</Text>
                     <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
                       <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="5"
                       icon={<Icon as={Ionicons} name="caret-up" /> } 
