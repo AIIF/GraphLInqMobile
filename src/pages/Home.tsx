@@ -1,36 +1,16 @@
-import React,{ReactChildren, useState} from "react";
+import React,{ useState} from "react";
 import {
-  Text,
-  Link,
-  Center,
-  HStack,
   NativeBaseProvider,
-  extendTheme,
-  VStack,
-  Box,
-  Image,
-  ScrollView,
-  Container,
-  Pressable,
   View,
-  Button,
-  IconButton,
   Icon,
-  Menu,
-  Input,
-  Modal,
-  FlatList,
-  Hidden,
-  useContrastText,
-  Card
 } from "native-base";
 
-import { Dimensions, Linking,StyleSheet } from 'react-native';
-import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Dimensions } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 
-import { createDrawerNavigator } 
+import { createDrawerNavigator }
          from '@react-navigation/drawer';
-import { NavigationContainer } 
+import { NavigationContainer }
          from '@react-navigation/native';
 
 // Component
@@ -42,8 +22,6 @@ import CustomSidebarMenu from "../components/SideBarMenu";
 import Header from '../components/Header/Header.js'
 
 const Drawer = createDrawerNavigator();
-  
-const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
@@ -72,7 +50,7 @@ const Navigation = () => {
       <Drawer.Navigator
         initialRouteName="Home"
         drawerContent={props => <CustomSidebarMenu {...props} />}>
-        {DrawerItems.map(drawer => 
+        {DrawerItems.map(drawer =>
           <Drawer.Screen
             key={drawer.id}
             name={drawer.name}
@@ -101,11 +79,7 @@ const Navigation = () => {
 };
 
 export default function Home(props: any) {
-
-
-  const [detailModalVisible, setDetailModalVisible] = useState(false);
-
-  return ( 
+  return (
     <NativeBaseProvider>
       <View bg="darkBlue.900" w={windowWidth} h={windowHeight} flex="1">
         <Navigation/>

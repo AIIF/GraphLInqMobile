@@ -1,31 +1,18 @@
-import React,{useState} from "react";
+import React from "react";
 import {
   Text,
-  Link,
-  Center,
   HStack,
-  VStack,
-  Box,
-  Image,
-  ScrollView,
   Pressable,
   View,
-  Button,
   Icon,
-  Input,
-  Modal,
-  FlatList,
 } from "native-base";
-
-import {  Linking } from 'react-native';
-import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
 const PageHeader = (props : any) => {
     return <HStack mb="5" justifyContent={"space-between"} alignItems="center">
         <Text fontSize={"xl"} color="white" textAlign={"center"} bold>{props.title}</Text>
-        <Pressable onPress={props.eventChanged}> 
+        <Pressable onPress={props.eventChanged}>
             {({isPressed}) => {
                 return <LinearGradient
                     colors={['rgb(56,8,255)', 'rgb(7,125,255)']}

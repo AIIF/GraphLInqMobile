@@ -1,37 +1,19 @@
-import React,{ReactChildren, useEffect, useState} from "react";
+import React,{ useEffect, useState} from "react";
 import {
   Text,
   Link,
-  Center,
-  HStack,
   NativeBaseProvider,
-  extendTheme,
   VStack,
   Box,
-  Image,
   ScrollView,
-  Container,
-  Pressable,
   View,
-  Button,
-  IconButton,
   Icon,
-  Menu,
-  Input,
-  Modal,
-  FlatList,
-  Hidden,
-  useContrastText,
-  Card,
-  Flex,
-  Spacer,
   Stack,
   Spinner
 } from "native-base";
 
-import { Dimensions, Linking,StyleSheet } from 'react-native';
-import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
-import PageHeader from "../components/Header/pageHeader";
+import { Dimensions } from 'react-native';
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import GraphCard from '../components/Graphs/GraphCard';
 import { GraphResponse } from '../providers/responses/graph';
@@ -40,7 +22,6 @@ import { useWeb3React } from "@web3-react/core";
 
 import GraphService from '../services/graphService';
 import { GRAPH_UPDATE } from '../redux/actions';
-import { SuspenseSpinner } from '../components/SuspenseSpinner';
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
@@ -52,7 +33,6 @@ const config = {
     'linear-gradient': LinearGradient
   }
 };
-
 
 const graphs = (props: any) => {
   const [reachable, setReacheable] = useState(true)
@@ -98,7 +78,7 @@ const graphs = (props: any) => {
           </Text>
         </Box>
         {reachable && !loaded &&
-        <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'> 
+        <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'>
           <Spinner
             color="#2334ff"
             size="md"
@@ -113,14 +93,14 @@ const graphs = (props: any) => {
         }
         {graphsList.length == 0 && loaded &&
           <View flexDirection='row' justifyContent='center' alignItems='center' bg='rgb(32,27,64)' borderRadius={'32'} p='3' my='1'>
-            <Icon as={Ionicons} name="warning-outline" color='yellow.600' size='sm' mr='2'/> 
-            <Text color='white' fontSize={'sm'}>You don't have created or deployed any graph yet, refer to our 
+            <Icon as={Ionicons} name="warning-outline" color='yellow.600' size='sm' mr='2'/>
+            <Text color='white' fontSize={'sm'}>You don't have created or deployed any graph yet, refer to our
             <Link marginLeft="1"
               href="https://docs.graphlinq.io/graph"
-              isExternal _text={{color:'amber.600'}} 
+              isExternal _text={{color:'amber.600'}}
               _hover={{ color: 'amber.700' }}
               display={{ base: 'block', sm: 'revert' }}
-              >documentation</Link> 
+              >documentation</Link>
               to start your journey.
             </Text>
           </View>

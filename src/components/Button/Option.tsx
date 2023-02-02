@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Text, Box, Icon, Spacer, Link } from 'native-base';
-import * as WalletIcons from "../../assets/icons";
+import * as WalletIcons from "../../../assets/icons";
 
 export default function Option({
     link = "",

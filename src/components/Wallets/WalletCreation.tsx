@@ -1,34 +1,20 @@
 import React,{useState} from "react";
 import {
   Text,
-  Link,
-  Center,
-  HStack,
-  VStack,
-  Box,
-  Image,
-  ScrollView,
   Pressable,
   View,
   Button,
   Icon,
   Input,
   Modal,
-  FlatList,
   FormControl,
-  NativeBaseProvider,
   useDisclose
 } from "native-base";
 
 import WalletService from "../../services/walletService";
-import { Dimensions, Linking } from 'react-native';
-import { isColor } from "react-native-reanimated";
-import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Dimensions } from 'react-native';
+import { FontAwesome } from "@expo/vector-icons";
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
-
-const windowWidth = Dimensions.get('screen').width;
-const windowHeight = Dimensions.get('screen').height;
-
 
 interface WalletCreationProps {
     setError: any
@@ -64,7 +50,7 @@ interface WalletCreationProps {
     }
 
     return <>
-        <Pressable onPress={onOpen}> 
+        <Pressable onPress={onOpen}>
             {({isPressed}) => {
                 return <LinearGradient
                     colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
@@ -91,11 +77,11 @@ interface WalletCreationProps {
                     <FormControl>
                         <FormControl.Label color="#aba1ca" fontSize={"2xl"}>Wallet Name:</FormControl.Label>
                         <Input value={walletName} onChange={handleChange} bg="black" fontSize={"md"} color="white" borderColor={"transparent"} borderRadius="12" m="3"/>
-                    </FormControl>  
+                    </FormControl>
                 </Modal.Body>
                 <Modal.Footer bg="rgb(32,27,64)" justifyContent={"right"} alignItems="center" borderColor={"transparent"}>
                     <View alignItems={"center"} justifyContent="right" flexDirection={"row"}>
-                        <Pressable onPress={createWallet}> 
+                        <Pressable onPress={createWallet}>
                         {({isPressed}) => {
                             return <LinearGradient
                                 colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
@@ -113,7 +99,7 @@ interface WalletCreationProps {
                         }}
                         </Pressable>
                         <Button variant="ghost" colorScheme="blueGray" onPress={() => {onClose}}>
-                            <Text color="#aba1ca" fontSize={"md"} bold>Cancel</Text>   
+                            <Text color="#aba1ca" fontSize={"md"} bold>Cancel</Text>
                         </Button>
                     </View>
                 </Modal.Footer>

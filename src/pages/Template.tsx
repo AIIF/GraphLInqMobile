@@ -1,9 +1,8 @@
-import React,{useEffect, useState, Suspense, useRef} from "react";
+import React,{useEffect, useState, useRef} from "react";
 import {
   Text,
   Link,
   Center,
-  HStack,
   VStack,
   Box,
   Image,
@@ -13,33 +12,24 @@ import {
   Button,
   Icon,
   Input,
-  Modal,
   FlatList,
   Spinner,
   FormControl,
-  SimpleGrid,
-  Alert,
-  Heading,
-  CheckCircleIcon,
   NativeBaseProvider,
   extendTheme,
   Stack
-  
 } from "native-base";
 
-import { Dimensions, Linking, StyleSheet, ViewStyle,  TextStyle, ScrollViewProps,} from 'react-native';
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Dimensions } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 
 import GraphService from "../services/graphService";
 
 import { GraphStateEnum } from '../enums/graphState';
 import { GraphTemplate } from '../providers/responses/templateGraph';
 
-const LinearGradient = require('expo-linear-gradient').LinearGradient ;
-
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
-
 interface TemplatesProps {
 
 }
@@ -54,7 +44,6 @@ const theme = extendTheme({
     }
   }
 });
-
 const Templates: React.FC<TemplatesProps> = ({ }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [templateID, setTemplateID] = useState(null);
@@ -74,7 +63,7 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
     fetchTemplates()
   }, [])
 
-  
+
 
   const [step, setStep] = useState(true);
 
@@ -103,15 +92,11 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
     }
   }
 
-  const onModalVisibleChanged = (modalVisible: any) => {
-    setModalVisible(modalVisible);
-  }
-
   return  (
   <NativeBaseProvider theme={theme}>
-    <View style={{ flex: 1, alignItems: 'center', 
+    <View style={{ flex: 1, alignItems: 'center',
                    justifyContent: 'center' }}  bg="darkBlue.900" width={windowWidth} height={windowHeight}>
-      <ScrollView p={["7","10"]} flexDirection={"column"}>        
+      <ScrollView p={["7","10"]} flexDirection={"column"}>
         <Text fontSize={"xl"} color="white" textAlign={"center"} bold mb='3'>Template Wizard</Text>
 
         <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]} shadow={"0"}>
@@ -127,9 +112,9 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
             <TemplatesList selectTemplate={selectTemplate} isLoading={isLoading} templateLoaded={templateLoaded} template={template} templates={templates} fileUpload={fileUpload} graphName={graphName} setGraphName={setGraphName} updateStep={updateStep} />
           }
           {!step &&
-            
+
             <TemplateVars templateData={graphData} graphName={graphName} templateName={template.template.title} templateDesc={template.template.description} step={step} setStep={setStep} />
-            
+
           }
 
           <Box justifyContent={"stretch"}  bg="rgb(32,27,64)" flexDirection={"column"} borderRadius="12" p={["7","10","15"]}>
@@ -145,7 +130,7 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
             <Text color="#aba1ca" fontSize={"md"} > - Download it </Text>
             <Text color="#aba1ca" fontSize={"md"} > - Upload & Edit On the <Link href="https://ide.graphlinq.io" color="blue.900" fontSize={"md"}>IDE</Link><Text> to suit their needs</Text>
             </Text>
-            <Text color="#aba1ca" fontSize={"md"} textAlign="center"> 
+            <Text color="#aba1ca" fontSize={"md"} textAlign="center">
               You can also make your own custom Graph from scratch using our <Link href="https://ide.graphlinq.io" color="blue.900" fontSize={"md"}>IDE </Link>
             </Text>
           </Box>
@@ -167,7 +152,7 @@ const TemplatesList = (props : any) => {
             <Input variant="underlined" color="#aba1ca" fontSize={"md"} mb="7" placeholder="Graph Name" value={props.graphName} onChange={(e) => { props.setGraphName(e.target.value) }}/>
             <Text color="white" fontSize={"xl"} bold mb="2"> Templates:</Text>
           </Box>
-          
+
           <ScrollView h="490" >
           {props.templateLoaded?
            <FlatList shadow="1" numColumns={2} m="1" data={props.templates}//props.templates
@@ -176,9 +161,9 @@ const TemplatesList = (props : any) => {
               }) => {
               return <Pressable w="50%" p="1" onPress={() => { props.selectTemplate(item.key);}}>
                   {({isPressed,isFocused, }) => {
-                  return <Box 
-                  borderColor={isPressed?"rgb(7,125,255)": isFocused ? "rgb(7,125,255)" : "#aba1ca"} 
-                  borderWidth="2" 
+                    return <Box
+                  borderColor={isPressed?"rgb(7,125,255)": isFocused ? "rgb(7,125,255)" : "#aba1ca"}
+                  borderWidth="2"
                   alignItems={"center"} style={{
                       borderRadius: 32,
                       alignContent: "center",
@@ -191,7 +176,7 @@ const TemplatesList = (props : any) => {
               }}
               </Pressable>
             }} />
-              : <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'> 
+              : <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'>
                 <Spinner
                   color="#2334ff"
                   size="md"
@@ -321,7 +306,7 @@ const TemplateVars = (props:any) => {
             setIsLoading(false)
         })
   }
-  
+
   const resultRef = useRef<HTMLInputElement>(null)
 
   const executeScroll = () => resultRef.current?.scrollIntoView()

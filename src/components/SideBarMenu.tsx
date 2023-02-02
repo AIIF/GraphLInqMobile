@@ -3,25 +3,22 @@ import {
   View,
   Image,
   Text,
-  Link,
   Box,
   Icon,
   Button,
-  Modal,
 } from 'native-base';
 
-import { StyleSheet, SafeAreaView, Linking} from 'react-native';
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { StyleSheet} from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import { useWeb3React } from "@web3-react/core";
 import { useWalletContract } from "../hooks/useWalletContract";
 
-const Logo = require('../assets/logo.svg');
+const Logo = require('../../assets/logo.svg');
 
 import ModalDeposit from './ContractBalance/ModalDeposit';
 import ModalWithdraw from './ContractBalance/ModalWithdraw';
@@ -41,7 +38,7 @@ const CustomSidebarMenu = (props: any) => {
     <View style={{flex: 1}} bg="rgb(32,27,64)" >
       <ModalDeposit depositModalVisible={depositModalVisible} setDepositModalVisible={setDepositModalVisible} />
       <ModalWithdraw withdrawModalVisible={withdrawModalVisible} setWithdrawModalVisible={setWithdrawModalVisible} />
-      
+
       {/*Top Large Image */}
       <Image
         source={Logo}
@@ -61,7 +58,7 @@ const CustomSidebarMenu = (props: any) => {
         </Button>
       </Box>
       <DrawerContentScrollView {...props} >
-        <DrawerItemList {...props} style={{margin:5, backgroundColor: 'white'}}/>        
+        <DrawerItemList {...props} style={{margin:5, backgroundColor: 'white'}}/>
       </DrawerContentScrollView>
     </View>
   );

@@ -1,52 +1,28 @@
-import React,{ReactChildren, useEffect, useRef, useState} from "react";
+import React,{useEffect, useRef, useState} from "react";
 import {
   Text,
   Link,
-  Center,
   HStack,
-  NativeBaseProvider,
-  extendTheme,
   VStack,
   Box,
-  Image,
   ScrollView,
-  Container,
   Pressable,
   View,
   Button,
-  IconButton,
   Icon,
-  Menu,
-  Input,
   Modal,
-  FlatList,
-  Hidden,
-  useContrastText,
-  Card,
   useDisclose,
-  useClipboard,
-  PresenceTransition
 } from "native-base";
 
-import { Dimensions, Linking,StyleSheet } from 'react-native';
-import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Dimensions } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 import { GraphStatus } from './GraphStatus';
 import { GraphResponse } from '../../providers/responses/graph';
 import { GraphStateEnum } from '../../enums/graphState';
 import GraphService from '../../services/graphService';
 import { Log } from '../../providers/responses/logs';
-import useInterval from '../../hooks/useInterval'
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
-
-const windowWidth = Dimensions.get('screen').width;
-const windowHeight = Dimensions.get('screen').height;
-
-const config = {
-  dependencies: {
-    'linear-gradient': LinearGradient
-  }
-};
 
 interface GraphCardProps {
   GraphInfo: GraphResponse,
@@ -85,15 +61,11 @@ const GraphCard : React.FC<GraphCardProps> = ({
     ...props
 }) => {
     const [detailModalVisible, setDetailModalVisible] = useState(false);
-  
-    const onModalVisibleChanged = (detailModalVisible: any) => {
-      setDetailModalVisible(detailModalVisible);
-    }
 
     const [logs, setLogs] = React.useState([])
     const { isOpen, onOpen, onClose } = useDisclose()
     const [inLogs, setInLogs] = React.useState<boolean>(false);
-    
+
     const bottomRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -225,7 +197,7 @@ const GraphCard : React.FC<GraphCardProps> = ({
                   <Pressable onPress={() => { deployGraph() }}>
                     {()=>{
                       return <View alignItems={'flex-start'} flexDirection='row' px='3'>
-                        <Icon as={Ionicons} name='play-outline' color='green.900' size='md' mr='2'/> 
+                        <Icon as={Ionicons} name='play-outline' color='green.900' size='md' mr='2'/>
                         <Text color='white' fontSize={'lg'}>Start</Text>
                         </View>
                     }}
@@ -233,7 +205,7 @@ const GraphCard : React.FC<GraphCardProps> = ({
                   <Pressable onPress={() => { changeGraphState(GraphStateEnum.Restarting) }}>
                     {()=>{
                       return <View alignItems={'flex-start'} flexDirection='row' px='3'>
-                        <Icon as={Ionicons} name='play-outline' color='green.900' size='md' mr='2'/> 
+                        <Icon as={Ionicons} name='play-outline' color='green.900' size='md' mr='2'/>
                         <Text color='white' fontSize={'lg'}>Force restart</Text>
                         </View>
                     }}
@@ -241,7 +213,7 @@ const GraphCard : React.FC<GraphCardProps> = ({
                   <Pressable onPress={() => { changeGraphState(GraphStateEnum.Stopped) }}>
                     {()=>{
                       return <View alignItems={'flex-start'} flexDirection='row' px='3'>
-                        <Icon as={Ionicons} name='stop-outline' color='blue.900' size='md' mr='2'/> 
+                        <Icon as={Ionicons} name='stop-outline' color='blue.900' size='md' mr='2'/>
                         <Text color='white' fontSize={'lg'}>Stop</Text>
                         </View>
                     }}
@@ -249,7 +221,7 @@ const GraphCard : React.FC<GraphCardProps> = ({
                   <Pressable onPress={() => { removeGraph() }}>
                     {()=>{
                       return <View alignItems={'flex-start'} flexDirection='row' px='3'>
-                        <Icon as={Ionicons} name='trash-outline' color='red.900' size='md' mr='2'/> 
+                        <Icon as={Ionicons} name='trash-outline' color='red.900' size='md' mr='2'/>
                         <Text color='white' fontSize={'lg'}>Delete</Text>
                         </View>
                     }}
@@ -268,7 +240,7 @@ const GraphCard : React.FC<GraphCardProps> = ({
                     </Link>
                     <Text color="#aba1ca" fontSize={"sm"} isTruncated maxW={'200'}>{GraphInfo?.hashGraph}</Text>
                   </VStack>
-                </HStack> 
+                </HStack>
               </HStack>
               <View alignItems={'center'}>
                 <VStack alignItems='flex-start'>
@@ -293,14 +265,14 @@ const GraphCard : React.FC<GraphCardProps> = ({
                     >
                     <View flexDirection='row' justifyContent={'center'} alignItems='center' mx='3' my='1'>
                       <Text fontSize={'sm'} color='white'  mr='2'>View Logs</Text>
-                      <Icon as={Ionicons} name='eye-outline' color='white' size='lg'/> 
+                      <Icon as={Ionicons} name='eye-outline' color='white' size='lg'/>
                     </View>
                   </LinearGradient>
                   }}
                 </Pressable>
                 <Pressable onPress={() => setDetailModalVisible(true)} alignItems='center' justifyContent={'center'}>
                   <Icon size={"2xl"} as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
-                </Pressable>  
+                </Pressable>
               </HStack>
           </Box>
         </ScrollView>

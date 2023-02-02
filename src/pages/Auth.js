@@ -1,8 +1,7 @@
-import React,{useState, useContext, useCallback, useEffect} from "react";
+import React from "react";
 import {
   Text,
   Link,
-  HStack,
   Heading,
   NativeBaseProvider,
   extendTheme,
@@ -10,11 +9,8 @@ import {
   Box,
   Image,
   Divider,
-  ScrollView,
   Container,
   View,
-  FlatList,
-  Button,
 } from "native-base";
 
 import { Dimensions} from 'react-native';
@@ -26,7 +22,7 @@ const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
 
-const Logo = require('../assets/logo.svg');
+const Logo = require('../../assets/logo.svg');
 
 const theme = extendTheme({
   shadows:{
@@ -46,12 +42,12 @@ const config = {
 };
 
 export default function Auth(props) {
-  return ( 
+  return (
     <NativeBaseProvider config={config} theme={theme}>
       <Container flex="1">
         <View bg="darkBlue.900"  width={windowWidth}
         height={windowHeight}
-        alignItems={"center"} flexDirection="column">      
+        alignItems={"center"} flexDirection="column">
           <Heading  py={"5"}>
             <Image
               src={Logo}
@@ -62,7 +58,7 @@ export default function Auth(props) {
               style={{resizeMode:"contain"}}
             />
           </Heading>
-          
+
           <Box
             borderRadius={["32","32","36"]}
             overflow="hidden"
@@ -78,15 +74,15 @@ export default function Auth(props) {
             >
             <Box bgColor="rgb(32,27,64)" textAlign={"center"} py={"5"}>
               <VStack >
-                <Text 
-                bold 
-                fontSize={["lg","1xl","2xl","3xl","4xl"]} 
-                color="white"> 
+                <Text
+                bold
+                fontSize={["lg","1xl","2xl","3xl","4xl"]}
+                color="white">
                 Dashboard Access
                 </Text>
-                <Text 
-                fontSize={["xs","sm","md","md","lg"]} 
-                color="gray.500"> 
+                <Text
+                fontSize={["xs","sm","md","md","lg"]}
+                color="gray.500">
                 Connect your wallet to access your dashboard
                 </Text>
               </VStack>
@@ -99,7 +95,7 @@ export default function Auth(props) {
             alignSelf="center"/>
             <WalletManager onPageChanged={props.onPageChanged}/>
           </Box>
-          <View flexDirection={"row"} justifyContent={"center"} 
+          <View flexDirection={"row"} justifyContent={"center"}
             h={windowHeight*0.2}
           >
             <Text fontSize={["xs","sm","md","lg"]} color="#aba1ca"> New to GraphLinq Wallet? </Text>

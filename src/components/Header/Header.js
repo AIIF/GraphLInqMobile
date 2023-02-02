@@ -9,7 +9,6 @@ import { shortenAddress } from "../../utils/index";
 import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get('screen').width;
-const windowHeight = Dimensions.get('screen').height;
 
 export default function Header(props){
 
@@ -28,7 +27,7 @@ export default function Header(props){
     name : "chatbox-outline",
     desc : "Telegram"
   }
-  ]; 
+  ];
 
   const theme = extendTheme({
     shadows:{
@@ -83,7 +82,7 @@ const navigation = useNavigation();
             <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"lg"}>More</Text></Modal.Header>
             <Modal.Body bg="darkBlue.900">
               {menuItems.map((item) => {
-                return <Pressable key={item.name}> 
+                return <Pressable key={item.name}>
                 {({isPressed}) => {
                   return <Box m="2" flexDirection={"row"} justifyContent="left" px="2" alignItems={"center"}  >
                     <Icon as={Ionicons} name={item.name} size="sm" color={"blue.900"}/>
@@ -135,7 +134,7 @@ const navigation = useNavigation();
         }
         <Pressable onPress={()=> setDetailModalVisible(true)} >
           <Icon size="4xl" as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
-        </Pressable>  
+        </Pressable>
       </View>
     </View>
   </NativeBaseProvider>

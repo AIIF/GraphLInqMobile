@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import Option from "./Button/Option";
 
-import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -14,22 +12,14 @@ import {
 import {REACT_APP_SIGN_KEY} from '@env';
 
 import { SUPPORTED_WALLETS } from "../constants/index";
-import usePrevious from "../hooks/usePrevious";
 import WalletService from "../services/walletService";
 import Web3 from "web3";
-
-const WALLET_VIEWS = {
-  OPTIONS: "options",
-  OPTIONS_SECONDARY: "options_secondary",
-  ACCOUNT: "account",
-  PENDING: "pending",
-}; 
 
 const WalletManager = (props: any) => {
 
     const dispatch = useDispatch();
 
-    const { active, account, connector, activate, error, library } = useWeb3React();
+    const { account, connector, activate } = useWeb3React();
 
     useEffect(() => {
         if (!account) { return }
@@ -41,16 +31,15 @@ const WalletManager = (props: any) => {
             console.log(activate)
             let web3: any = undefined
             let signature: string = ""
-            const firstChain = (connector as any).supportedChainIds[0]
             if ((window as any).ethereum !== undefined) {
               web3 = new Web3((window as any).ethereum)
               try {
                 signature = await web3.eth.personal.sign(REACT_APP_SIGN_KEY, account, "")
               } catch (e) { console.error(e) }
             }
-            
+
             const result = await WalletService.authWallet(account, signature)
-            
+
             if (result) {
               dispatch({
                 name: "walletManager",

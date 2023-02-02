@@ -2,20 +2,14 @@ import React,{useEffect, useState} from "react";
 import {
   Text,
   Link,
-  Center,
   HStack,
   VStack,
   Box,
-  Image,
   ScrollView,
-  Pressable,
   View,
   Button,
   Icon,
   Input,
-  Modal,
-  FlatList,
-  FormControl,
   NativeBaseProvider,
   useClipboard,
   Stack,
@@ -23,21 +17,14 @@ import {
   Spacer
 } from "native-base";
 
-import { Dimensions, Linking } from 'react-native';
-import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Dimensions } from 'react-native';
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import WalletCreation from "../components/Wallets/WalletCreation";
-import { HiExternalLink, HiOutlineClipboardCopy } from "react-icons/hi";
 import WalletService from "../services/walletService";
 import { useDispatch, useSelector } from "react-redux";
 import { WALLET_UPDATE } from "../redux/actions";
-import { SuspenseSpinner } from "../components/SuspenseSpinner";
 import { useWeb3React } from "@web3-react/core";
 import { ManagedResponse } from "../providers/responses/managed";
-
-import PageHeader from "../components/Header/pageHeader";
-import WalletInfo from "../components/WalletInfo";
-
-const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
 const windowWidth = Dimensions.get('screen').width;
 const windowHeight = Dimensions.get('screen').height;
@@ -87,8 +74,8 @@ const Wallets = (props: any) => {
                     <WalletCreation setSuccess={setSuccess} setError={setError}/>
                 </HStack>
 
-                {reachable && !loaded && 
-                <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='50'> 
+                {reachable && !loaded &&
+                <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='50'>
                     <Spinner
                     color="#2334ff"
                     size="md"
@@ -97,7 +84,7 @@ const Wallets = (props: any) => {
                 }
                 {walletList.length == 0 && loaded && (
                     <View flexDirection='row' justifyContent='center' alignItems='center' bg='rgb(32,27,64)' borderRadius={'32'} p='3' my='1'>
-                        <Icon as={Ionicons} name="warning-outline" color='yellow.600' size='sm' mr='2'/> 
+                        <Icon as={Ionicons} name="warning-outline" color='yellow.600' size='sm' mr='2'/>
                         <Text color='white' fontSize={'sm'}>You don't have any managed wallet yet.</Text>
                     </View>
                 )}
@@ -188,7 +175,7 @@ const Wallets = (props: any) => {
                 </VStack >
                 )}
             </ScrollView>
-        </View>                      
+        </View>
     </NativeBaseProvider>
     )
 }

@@ -8,7 +8,6 @@ import {
   Modal,
   IconButton,
   Pressable,
-  useDisclose,
   Stack,
   Input,
   HStack
@@ -54,7 +53,7 @@ const ModalWithdraw = (props:any) => {
         const asNumber: number = parseFloat(amountWithdraw)
         if (asNumber <= 0) {
             setError(`Invalid amount to withdraw from the balance contract: ${asNumber} GLQ`)
-            return 
+            return
         }
 
         setPending("Pending, waiting for server response...")
@@ -115,32 +114,32 @@ const ModalWithdraw = (props:any) => {
                     <Text textAlign={'center'} color='white' fontSize="xl" bg='transparent' mr='2'>GLQ</Text>
                     <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
                       <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="5"
-                      icon={<Icon as={Ionicons} name="caret-up" /> } 
+                      icon={<Icon as={Ionicons} name="caret-up" /> }
                       _icon={{color:"rgb(32,27,64)", size:"sm"}}
                       _pressed={{backgroundColor:"white"}}
                       onPress={() => {
                         let currentAmount = parseFloat(amountWithdraw);
                         currentAmount += 0.1;
-                        setAmountWithdraw(currentAmount.toString()); 
+                        setAmountWithdraw(currentAmount.toString());
                       }}
                       />
                       <IconButton variant={"ghost"} borderBottomRightRadius="32" h="5" w="5"
-                      icon={<Icon as={Ionicons} name="caret-down" />} 
+                      icon={<Icon as={Ionicons} name="caret-down" />}
                       _icon={{color:"rgb(32,27,64)", size:"sm"}}
                       _pressed={{backgroundColor:"white"}}
                       onPress={() => {
                         let currentAmount= parseFloat(amountWithdraw);
                         if(currentAmount > 0.0){
                           currentAmount -= 0.1;
-                          setAmountWithdraw(currentAmount.toString()); 
+                          setAmountWithdraw(currentAmount.toString());
                         }
                       }}
                       />
                     </Box>
                   </HStack>
                 </Box>
-                
-                <Pressable mt="5" onPress={doWithdraw} w='70%' justifyContent={'center'} alignItems='center' alignSelf={'center'}> 
+
+                <Pressable mt="5" onPress={doWithdraw} w='70%' justifyContent={'center'} alignItems='center' alignSelf={'center'}>
                     {({isPressed}) => {
                         return <LinearGradient
                             colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
@@ -152,16 +151,16 @@ const ModalWithdraw = (props:any) => {
                             transform: [{scale: isPressed ? 0.95 : 1}]
                             }}
                             justifyContent="center"
-                            alignItems={"center"} 
+                            alignItems={"center"}
                         >
-                        <View mx='10' style={{borderRadius:32}}  justifyContent="center" p="2" alignItems={'center'} textAlign='center'> 
+                        <View mx='10' style={{borderRadius:32}}  justifyContent="center" p="2" alignItems={'center'} textAlign='center'>
                           <Text textAlign={"center"} color="white" fontSize={"sm"} bold>Withdraw</Text>
                         </View>
                     </LinearGradient>
                     }}
                 </Pressable>
               </Stack>
-              
+
             </Modal.Body>
           </Modal.Content>
       </Modal>
