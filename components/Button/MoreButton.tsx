@@ -17,7 +17,7 @@ const MoreButton = (props: any) => {
       placement={"bottom right"} focusable="false" trigger={triggerProps => {
         return (
             <Pressable accessibilityLabel="More options menu" {...triggerProps} >
-              <Icon size="4xl" as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="rgb(136,127,164)" />
+              <Icon size="4xl" as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
             </Pressable>   
         );
         }}>
@@ -25,7 +25,7 @@ const MoreButton = (props: any) => {
           return (
             <Menu.Item flexDirection={"row"} key={element.name}>
               <Icon size="md" as={Ionicons} name={element.name} color="rgb(56,8,255)" />
-              <Text color="rgb(136,127,164)"> {element.desc}</Text> 
+              <Text color="#aba1ca"> {element.desc}</Text> 
             </Menu.Item>
           )
         })}  

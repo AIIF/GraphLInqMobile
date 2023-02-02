@@ -38,10 +38,10 @@ const CustomSidebarMenu = (props: any) => {
         source={Logo}
         style={styles.sideMenuProfileIcon}
       />
-      <Text textAlign={"center"} fontSize="sm" color="rgb(136,127,164)" my={"2"}> Cloud Contract Balance</Text>
+      <Text textAlign={"center"} fontSize="sm" color="#aba1ca" my={"2"}> Cloud Contract Balance</Text>
       <Box bg="black" borderRadius={"32"} mx="10" alignItems={"center"} justifyContent="space-between" flexDirection={"row"} px="3" py="1">
         <Text  fontSize="xl" color="white" bold>0 </Text>
-        <Text  fontSize="xs" color="rgb(136,127,164)" >GLQ</Text>
+        <Text  fontSize="xs" color="#aba1ca" >GLQ</Text>
       </Box>
       <Box  alignItems={"center"} justifyContent="center" mx="10" my="2" flexDirection={"row"}>
         <Button onPress={()=> {setDepositModalVisible(true);}} borderRadius={"32"} endIcon={<Icon as={Ionicons} name="arrow-up-circle" size="sm" color="rgb(32,27,64)"/>} bg="darkBlue.900" mr="2" w="50%">

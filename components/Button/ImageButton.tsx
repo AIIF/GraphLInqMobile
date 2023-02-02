@@ -33,7 +33,7 @@ const ImageButton: React.FC = (
                           bg={isPressed? "darkBlue.900" :"#15122b"}
                           px={["5","10","30","50"]}
                           py={"2"}>
-                        <Text fontSize={["xl","2xl","3xl","4xl"]} color="rgb(136,127,164)"> {props.label}</Text>
+                        <Text fontSize={["xl","2xl","3xl","4xl"]} color="#aba1ca"> {props.label}</Text>
                         <Image src={props.btnimg} style={{resizeMode:"contain"}} w={["6","8","10","12"]} h="full" ></Image>
                     </View>
                 </LinearGradient>

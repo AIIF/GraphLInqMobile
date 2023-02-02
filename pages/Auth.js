@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useContext, useCallback, useEffect} from "react";
 import {
   Text,
   Link,
@@ -17,10 +17,16 @@ import {
   Button,
 } from "native-base";
 
-import {useWalletConnect} from '@walletconnect/react-native-dapp';
+
 import { Dimensions} from 'react-native';
 import ImageButton from '../components/Button/ImageButton';
 import MetaMaskOnboarding from '@metamask/onboarding';
+import { useWalletContext } from '../Context/WalletContext';
+import axios from 'axios';
+import Web3 from "Web3"
+
+import WalletManager from "../components/WalletManager";
+
 const forwarderOrigin = 'http://localhost:19006';
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
@@ -47,53 +53,13 @@ const config = {
   }
 };
 
-const buttonDetails =[
-  {
-    label: "MetaMask",
-    imgUrl: require('../assets/icons/metamask.svg')
-  },
-  {
-    label: "WalletConnect",
-    imgUrl: require('../assets/icons/walletConnect.svg')
-  },
-  {
-    label: "Coinbase Wallet",
-    imgUrl: require('../assets/icons/coinbaseWallet.svg')
-  },
-  {
-    label: "Fortmatic",
-    imgUrl: require('../assets/icons/fortmatic.svg')
-  },
-  {
-    label: "Portis",
-    imgUrl: require('../assets/icons/portis.svg')
-  },
-];
-
-function Content() {
-  const [button, selectButton] = React.useState(0);
-  const [shouldShow, setShouldShow] = useState(false);
-
-  return (
-    <ScrollView px={["3","5","7","10"]} py={["5","5","5","10"]}>
-      <FlatList  m="1" data={buttonDetails}
-        renderItem={({item}) => {
-          return (
-            <View mb={["5","5","5","10"]}> 
-              <ImageButton label={item.label} btnimg={item.imgUrl}/> 
-            </View>
-          )
-      }} />
-    </ScrollView>
-  )
-}
-
 export default function Auth(props) {
 
+  const {walletInfo, setWalletInfo} = useWalletContext();
+  
   let onboarding;
   let accounts;
-  let piggybankContract;
-
+ 
   onboarding = new MetaMaskOnboarding({ forwarderOrigin })
 
   const isMetaMaskConnected = () => accounts && accounts.length > 0
@@ -109,45 +75,64 @@ export default function Auth(props) {
     console.log('as',accounts)
     MetaMaskConnect();
   }
-
   const Connect = async () => {
     try {
       const newAccounts = await ethereum.request({
         method: 'eth_requestAccounts',
       })
       handleNewAccounts(newAccounts);
-      MetaMaskConnect();
       console.log('account',accounts)
-      // {props.onPageChanged('Main')}
     } catch (error) {
       console.error(error)
     }
   }
 
+  const getEthBalance = async() => {
+    web3 = new Web3(window.ethereum);
+    try {
+      // Request account access
+      await window.ethereum.enable();
+      var accounts = await web3.eth.getAccounts();
+      web3.eth.getBalance('0x9f9c8ec3534c3ce16f928381372bfbfbfb9f4d24')
+      .then(ethBalance => {
+        walletInfo.EthBalance = ethBalance;
+        console.log(walletInfo);
+      })
+        
+      return true
+    } catch(e) {
+      // User denied access
+      return false
+    }
+  }
   const MetaMaskConnect = () => {
-    // accounts = ethereum.request({
-    //   method: 'eth_accounts',
-    // })
-
     //Now we check to see if Metmask is installed
     if (!isMetaMaskInstalled()) {
       onboarding.startOnboarding();
     } else if (isMetaMaskConnected()) {
       console.log('connected');
-      {props.onPageChanged('Main')}
+      walletInfo.accountInfo = accounts;
+      walletInfo.etherBalance = ethereum.request({ method: 'eth_getBalance'});
+     // setWalletInfo({ accountInfo: accounts});
+      console.log("wallet:", walletInfo.accountInfo);
+      
+      Eth();
+
+       {props.onPageChanged('Home')}
+      //Actions.home();
       if (onboarding) {
         onboarding.stopOnboarding()
       }  
     } else {
+      
       Connect();
       console.log('connect');
     }
   };
 
-  function onMetaMaskConnect()
-  {
-    MetaMaskConnect();
-  }
+  useEffect(() => {
+    getEthBalance();
+  }, [])
 
   return ( 
     <NativeBaseProvider config={config} theme={theme}>
@@ -155,7 +140,7 @@ export default function Auth(props) {
         <View bg="darkBlue.900"  width={windowWidth}
         height={windowHeight}
         alignItems={"center"} flexDirection="column">      
-          <Heading flex="0.7" py={["1","3","5"]}>
+          <Heading  py={"5"}>
             <Image
               src={Logo}
               width={windowWidth*0.6}
@@ -170,8 +155,7 @@ export default function Auth(props) {
             borderRadius={["32","32","36"]}
             overflow="hidden"
             width={windowWidth*0.9}
-            maxWidth={"960"}
-            height={"80%"}
+            h={windowHeight*0.7}
             bg={{ linearGradient:{
               colors: ['#1d1938', '#15122b'],
               start:[0,0],
@@ -200,9 +184,9 @@ export default function Auth(props) {
               end:[1,0]
             }}}
             alignSelf="center"/>
-            {isMetaMaskInstalled()?
+            {/* {isMetaMaskInstalled()?
             <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
-              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}  onMetaMaskConnect={onMetaMaskConnect}/>
+              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}  onMetaMaskConnect={MetaMaskConnect}/>
             </View>
             :
             <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
@@ -210,13 +194,13 @@ export default function Auth(props) {
               <View mb={["5","5","5","10"]}> <ImageButton label={"Open in Coinbase Wallet"} btnimg={require('../assets/icons/coinbaseWallet.svg')} /> </View> 
               <View mb={["5","5","5","10"]}> <ImageButton label={"Fortmatic"} btnimg={require('../assets/icons/fortmatic.svg')}/> </View>
             </View>
-            }
-            
+            } */}
+            <WalletManager onPageChanged={props.onPageChanged}/>
           </Box>
           <View flexDirection={"row"} justifyContent={"center"} 
-            flex="0.3"
-            >
-            <Text fontSize={["xs","sm","md","lg"]} color="rgb(136,127,164)"> New to GraphLinq Wallet? </Text>
+            h={windowHeight*0.2}
+          >
+            <Text fontSize={["xs","sm","md","lg"]} color="#aba1ca"> New to GraphLinq Wallet? </Text>
             <Link href="https://docs.graphlinq.io/wallet">
               <Text color="blue.500" underline fontSize={["xs","sm","md","lg"]}>
                 Learn more

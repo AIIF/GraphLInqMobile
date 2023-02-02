@@ -1,11 +1,21 @@
-import React,{useState} from 'react';
-import {Icon, Pressable, View, Text,Box,Modal} from 'native-base';
-import {StyleSheet} from 'react-native';
+import React,{useState, useEffect, useContext} from 'react';
+import {Icon, Pressable, View, Text,Box,Modal, VStack} from 'native-base';
+import {StyleSheet, Dimensions} from 'react-native';
 import { Entypo,Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import {LinearGradient} from "expo-linear-gradient";
+import { useWeb3React } from "@web3-react/core";
+import { shortenAddress } from "../../utils/index";
+import { useSelector } from "react-redux";
+import { useWalletContext } from '../../Context/WalletContext.js';
+
+const windowWidth = Dimensions.get('screen').width;
+const windowHeight = Dimensions.get('screen').height;
 
 export default function Header(props){
+
+  const {walletInfo, setWalletInfo} = useWalletContext();
+
   const [detailModalVisible, setDetailModalVisible] = useState(false);
 
   const menuItems =[{
@@ -21,22 +31,54 @@ export default function Header(props){
     name : "chatbox-outline",
     desc : "Telegram"
   }
-]; 
+  ]; 
 
-  const navigation = useNavigation();
+  function formatCur(num, min, max) {
+        const formatConfig = {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: min,
+            maximumFractionDigits: max,
+            currencyDisplay: "symbol",
+        };
+        const curFormatter = new Intl.NumberFormat("en-US", formatConfig);
+
+        return curFormatter.format(num);
+    }
+
+  const [glqPrice, setGlqPrice] = useState("");
+    const refreshGlqPrice = async () => {
+        try {
+            let response = await fetch("https://api.graphlinq.io/front/token");
+            let responseJson = await response.json();
+            setGlqPrice(formatCur(responseJson.uni.glqPrice, 0, 5));
+        } catch (error) {
+            console.error(error);
+        }
+  };
+
+const navigation = useNavigation();
+
+  useEffect(() => {
+    refreshGlqPrice()
+  }, []);
+
+  const { account, connector } = useWeb3React();
+  let amountBalance = useSelector((state) => state.modals.balance.amount);
+
   return(
     <View style={headerStyles.container} py="2" px="3">
       <Modal isOpen={detailModalVisible} onClose={setDetailModalVisible} size={"lg"} borderRadius="32" >
         <Modal.Content maxH="250" borderRadius="15">
           <Modal.CloseButton />
-            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="rgb(136,127,164)" fontSize={"lg"}>More</Text></Modal.Header>
+            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"lg"}>More</Text></Modal.Header>
             <Modal.Body bg="darkBlue.900">
               {menuItems.map((item) => {
                 return <Pressable key={item.name}> 
                 {({isPressed}) => {
                   return <Box m="2" flexDirection={"row"} justifyContent="left" px="2" alignItems={"center"}  >
                     <Icon as={Ionicons} name={item.name} size="sm" color={"blue.900"}/>
-                    <Text color="rgb(136,127,164)" fontSize={"md"} > {item.desc} </Text>
+                    <Text color="#aba1ca" fontSize={"xs"} > {item.desc} </Text>
                   </Box>
                 }}
               </Pressable>
@@ -45,7 +87,7 @@ export default function Header(props){
         </Modal.Content>
       </Modal>
 
-        <Pressable onPress={()=>navigation.toggleDrawer()} pr="1" >
+      <Pressable onPress={()=>navigation.toggleDrawer()} pr="1" >
         {({isPressed}) => {
           return <LinearGradient
             colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
@@ -65,14 +107,25 @@ export default function Header(props){
               </View>
           </LinearGradient>
         }}
-        </Pressable>
+      </Pressable>
       <View justifyContent={"center"} flexDirection="row" alignItems={"center"}>
-        <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={["3","5","7","10"]} py={"2"}>
-            <Text fontSize={["md","lg"]} color="rgb(136,127,164)">GLQ:</Text>
-            <Text fontSize={["md","lg"]} color="rgb(136,127,164)" bold>$0.00000</Text>
-          </Box>
+        <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" m={"2"} px={["3","5","7","10"]} py={"2"}>
+            <Text fontSize={"lg"} color="#aba1ca">GLQ:</Text>
+            <Text fontSize={"md"} color="#aba1ca" bold>{glqPrice}</Text>
+        </Box>
+        {account !== undefined && windowWidth>=400 && (
+          <VStack>
+            <Box bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"3"} py={"1"} mb="1" w="100" alignSelf={"center"}>
+                <Text fontSize={["md","lg"]} color="#aba1ca">{amountBalance} GLQ</Text>
+            </Box>
+            <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"3"} py={"1"} justifyContent={"center"}>
+                <Text fontSize={"xs"} color="#aba1ca">{ shortenAddress(account)}</Text>
+            </Box>
+          </VStack>
+        )
+        }
         <Pressable onPress={()=> setDetailModalVisible(true)} >
-          <Icon size="4xl" as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="rgb(136,127,164)" />
+          <Icon size="4xl" as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
         </Pressable>  
       </View>
     </View>

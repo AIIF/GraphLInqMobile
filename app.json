@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Graphlinq.mobile",
-    "slug": "Graphlinq.mobile",
+    "name": "Graphlinq Mobile",
+    "slug": "Graphlinq Mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

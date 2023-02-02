@@ -81,14 +81,14 @@ const graphs = (props: any) => {
       <Modal isOpen={detailModalVisible} onClose={setDetailModalVisible} size={"lg"} borderRadius="32" >
         <Modal.Content maxH="250" borderRadius="15">
           <Modal.CloseButton />
-            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="rgb(136,127,164)" fontSize={"lg"}>More</Text></Modal.Header>
+            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"lg"}>More</Text></Modal.Header>
             <Modal.Body bg="darkBlue.900">
               {menuItems.map((item) => {
                 return <Pressable key={item.name}> 
                 {({isPressed}) => {
                   return <Box m="2" flexDirection={"row"} justifyContent="left" px="2" alignItems={"center"}>
                     <Icon as={Ionicons} name={item.name} size="sm" color={item.color}/>
-                    <Text color="rgb(136,127,164)" fontSize={"md"} > {item.desc} </Text>
+                    <Text color="#aba1ca" fontSize={"md"} > {item.desc} </Text>
                   </Box>
                 }}
                 </Pressable>
@@ -101,7 +101,7 @@ const graphs = (props: any) => {
 
       <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]}>
         <Icon as={Ionicons} name="information-circle-outline" size="4" color="blue.800"/>
-        <Text color="rgb(136,127,164)" fontSize={"ms"} p="1" lineHeight={'16'}>
+        <Text color="#aba1ca" fontSize={"ms"} p="1" lineHeight={'16'}>
           Below is the list of your Graphs. You can view logs, stop or delete each one of them.
         </Text>
       </Box>
@@ -112,21 +112,21 @@ const graphs = (props: any) => {
             <HStack>
               <Icon size="xs" as={Ionicons} name={"ellipse"} color="green.900" m="1"/>
               <VStack>
-                <Text color="rgb(136,127,164)" fontSize={"sm"} > Demo </Text>
-                <Text color="rgb(136,127,164)" fontSize={"xs"} > 13d6664fd694ae55967c5cd7aa56a82... </Text>
+                <Text color="#aba1ca" fontSize={"sm"} > Demo </Text>
+                <Text color="#aba1ca" fontSize={"xs"} > 13d6664fd694ae55967c5cd7aa56a82... </Text>
               </VStack>
             </HStack>
             <Pressable onPress={() => setDetailModalVisible(true)}>
-              <Icon size={"lg"} as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="rgb(136,127,164)" />
+              <Icon size={"lg"} as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
             </Pressable>   
           </HStack>
 
           <VStack justifyContent={"left"}>
-            <Text color="rgb(136,127,164)" fontSize={"sm"} > Hosted API : </Text>
-            <Text color="rgb(136,127,164)" fontSize={"md"} mb="2" bold pl="5"> </Text>
-            <Text color="rgb(136,127,164)" fontSize={"sm"} > Execution cost : </Text>
-            <Text color="rgb(136,127,164)" fontSize={"md"} mb="2" bold pl="5"> 0.02799000 GLQ</Text>
-            <Text color="rgb(136,127,164)" fontSize={"sm"} > Running since : </Text>
+            <Text color="#aba1ca" fontSize={"sm"} > Hosted API : </Text>
+            <Text color="#aba1ca" fontSize={"md"} mb="2" bold pl="5"> </Text>
+            <Text color="#aba1ca" fontSize={"sm"} > Execution cost : </Text>
+            <Text color="#aba1ca" fontSize={"md"} mb="2" bold pl="5"> 0.02799000 GLQ</Text>
+            <Text color="#aba1ca" fontSize={"sm"} > Running since : </Text>
             <Text color="rgb(126,127,164)" fontSize={"md"} mb="2" bold pl="5"> 122 hours, 26.94 minutes</Text>
             <Text color="rgb(126,127,164)" fontSize={"sm"} > Created : </Text>
             <Text color="rgb(126,127,164)" fontSize={"md"} mb="2" bold pl="5"> 12/28/2022, 4:51:26 AM</Text>

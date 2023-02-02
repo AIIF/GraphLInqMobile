@@ -44,10 +44,10 @@ const Wallets = (props: any) => {
                 <Modal isOpen={detailModalVisible} onClose={setDetailModalVisible} size={"lg"} borderRadius="32" >
                     <Modal.Content maxH="250" borderRadius="15">
                         <Modal.CloseButton />
-                        <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="rgb(136,127,164)" fontSize={"lg"}>More</Text></Modal.Header>
+                        <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"lg"}>More</Text></Modal.Header>
                         <Modal.Body bg="rgb(32,27,64)">
                             <FormControl>
-                                <FormControl.Label color="rgb(136,127,164)" fontSize={"2xl"}>Wallet Name:</FormControl.Label>
+                                <FormControl.Label color="#aba1ca" fontSize={"2xl"}>Wallet Name:</FormControl.Label>
                                 <Input bg="black" fontSize={"md"} color="white" borderColor={"transparent"} borderRadius="12" m="3"/>
                             </FormControl>  
                         </Modal.Body>
@@ -74,7 +74,7 @@ const Wallets = (props: any) => {
                                 <Button variant="ghost" colorScheme="blueGray" onPress={() => {
                                     setDetailModalVisible(false);
                                 }}>
-                                <Text color="rgb(136,127,164)" fontSize={"md"} bold>Cancel</Text>   
+                                <Text color="#aba1ca" fontSize={"md"} bold>Cancel</Text>   
                                 </Button>
                             </View>
                         </Modal.Footer>
@@ -84,9 +84,9 @@ const Wallets = (props: any) => {
                 <PageHeader title="My Wallets" buttonName="Create Wallet" iconAs={MaterialIcons} iconName="add" eventChanged={() => onModalVisibleChanged(true)}/>
 
                 <HStack justifyContent={"space-between"} px="3">
-                    <Text flex="1" color="rgb(136,127,164)" fontSize={"md"} mr="3">Wallet name</Text>
-                    <Text flex="3" color="rgb(136,127,164)" fontSize={"md"} mr="3">Address</Text>
-                    <Text flex="1" color="rgb(136,127,164)" fontSize={"md"} >Ether Amount</Text>
+                    <Text flex="1" color="#aba1ca" fontSize={"md"} mr="3">Wallet name</Text>
+                    <Text flex="3" color="#aba1ca" fontSize={"md"} mr="3">Address</Text>
+                    <Text flex="1" color="#aba1ca" fontSize={"md"} >Ether Amount</Text>
                 </HStack>
                 <VStack>
                     <WalletInfo/>
