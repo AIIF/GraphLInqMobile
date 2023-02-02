@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useContext} from 'react';
-import {Icon, Pressable, View, Text,Box,Modal, VStack} from 'native-base';
+import {Icon, Pressable, View, Text,Box,Modal, VStack, NativeBaseProvider, extendTheme} from 'native-base';
 import {StyleSheet, Dimensions} from 'react-native';
 import { Entypo,Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -32,6 +32,17 @@ export default function Header(props){
     desc : "Telegram"
   }
   ]; 
+
+  const theme = extendTheme({
+    shadows:{
+      "1": {
+        "box-shadow": "0 0 35px rgba(56,8,255,0.1), 0 0 15px rgb(7,125,255,0.3), 0 0 0 1px rgb(7,125,255,0.3)"
+      },
+      "0": {
+        "box-shadow": "0 0 35px rgba(0,0,0,.1), 0 0 15px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.3)"
+      }
+    }
+  });
 
   function formatCur(num, min, max) {
         const formatConfig = {
@@ -67,7 +78,8 @@ const navigation = useNavigation();
   let amountBalance = useSelector((state) => state.modals.balance.amount);
 
   return(
-    <View style={headerStyles.container} py="2" px="3">
+  <NativeBaseProvider theme={theme}>
+    <View style={headerStyles.container} py="2" px="3" shadow="1">
       <Modal isOpen={detailModalVisible} onClose={setDetailModalVisible} size={"lg"} borderRadius="32" >
         <Modal.Content maxH="250" borderRadius="15">
           <Modal.CloseButton />
@@ -129,6 +141,7 @@ const navigation = useNavigation();
         </Pressable>  
       </View>
     </View>
+  </NativeBaseProvider>
   )
 }
 

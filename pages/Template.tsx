@@ -20,7 +20,9 @@ import {
   SimpleGrid,
   Alert,
   Heading,
-  CheckCircleIcon
+  CheckCircleIcon,
+  NativeBaseProvider,
+  extendTheme
   
 } from "native-base";
 
@@ -48,6 +50,17 @@ const windowHeight = Dimensions.get('screen').height;
 interface TemplatesProps {
 
 }
+
+const theme = extendTheme({
+  shadows:{
+    "1": {
+      "box-shadow": "0 0 35px rgba(56,8,255,0.1), 0 0 15px rgb(7,125,255,0.3), 0 0 0 1px rgb(7,125,255,0.3)"
+    },
+    "0": {
+      "box-shadow": "0 0 35px rgba(0,0,0,.1), 0 0 15px rgba(0,0,0,.3), 0 0 0 1px rgba(0,0,0,.3)"
+    }
+  }
+});
 
 const Templates: React.FC<TemplatesProps> = ({ }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -102,40 +115,20 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
   }
 
   return  (
+  <NativeBaseProvider theme={theme}>
     <View style={{ flex: 1, alignItems: 'center', 
                    justifyContent: 'center' }}  bg="darkBlue.900" width={windowWidth} height={windowHeight}>
-      <ScrollView p={["7","10"]} flexDirection={"column"}>
-        <Modal isOpen={modalVisible} onClose={setModalVisible} size={"md"} borderRadius="32" >
-          <Modal.Content maxH="212" borderRadius="15">
-            <Modal.CloseButton />
-            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"xl"}>Import a Graph</Text></Modal.Header>
-            <Modal.Body bg="darkBlue.900">
-              <Pressable >
-                {({isPressed}) => {
-                  return <Box bg="rgb(32,27,64)" style={{
-                    borderRadius: 32,
-                    alignContent: "center",
-                    transform: [{scale: isPressed ? 0.95 : 1}]
-                  }}
-                  >
-                    <Text color="#aba1ca" fontSize={"md"} textAlign="center" p="3">Import .GLQ</Text>
-                </Box>
-                }}
-              </Pressable>
-            </Modal.Body>
-          </Modal.Content>
-        </Modal>
-        
-        <PageHeader title="Template Wizard" buttonName="Import .GLQ" iconName="upload" iconAs={FontAwesome} eventChanged={() => onModalVisibleChanged(true)}/>
+      <ScrollView p={["3","5"]} flexDirection={"column"}>        
+        <Text fontSize={"xl"} color="white" textAlign={"center"} bold mb='3'>Template Wizard</Text>
 
-        <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]}>
+        <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]} shadow={"0"}>
           <Icon as={Ionicons} name="information-circle-outline" size="4" color="blue.800"/>
           <Text color="#aba1ca" fontSize={"ms"} p="2" lineHeight={'16'}>
             GraphLinq's Instant Deploy Wizard lets you choose a template, fill in variables and deploy it instantly without having to code or making any changes on the IDE
           </Text>
         </Box>
 
-        <VStack>
+        <VStack shadow={"1"}>
 
           {step &&
             <TemplatesList selectTemplate={selectTemplate} isLoading={isLoading} templateLoaded={templateLoaded} template={template} templates={templates} fileUpload={fileUpload} graphName={graphName} setGraphName={setGraphName} updateStep={updateStep} />
@@ -165,7 +158,8 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
           </Box>
         </VStack>
       </ScrollView>
-  </View>
+    </View>
+  </NativeBaseProvider>
   )
 };
 
@@ -173,16 +167,17 @@ const TemplatesList = (props : any) => {
   const [graphName, setGraphName] = useState('');
 
   return (
-      <Box justifyContent={"center"} flexDirection={"column"} bg="rgb(32,27,64)" borderRadius="12" px={["7","10","15"]} py={["3","5","7"]} mb="5">
+    <NativeBaseProvider theme={theme}>
+      <Box justifyContent={"center"} flexDirection={"column"} bg="rgb(32,27,64)" borderRadius="12" px={["7","10"]} py={["3","5","7"]} mb="5" shadow="1">
           <Box justifyContent={"left"} >
             <Text color="white" fontSize={"xl"} bold mb="3"> Name Your Graph:</Text>
             <Input variant="underlined" color="#aba1ca" fontSize={"md"} mb="7" placeholder="Graph Name" value={props.graphName} onChange={(e) => { props.setGraphName(e.target.value) }}/>
             <Text color="white" fontSize={"xl"} bold mb="2"> Templates:</Text>
           </Box>
           
-          <ScrollView h="200">
+          <ScrollView h="490" >
           {props.templateLoaded?
-           <FlatList numColumns={2} m="1" data={props.templates}//props.templates
+           <FlatList shadow="1" numColumns={2} m="1" data={props.templates}//props.templates
               renderItem={({
                 item
               }) => {
@@ -197,8 +192,8 @@ const TemplatesList = (props : any) => {
                   }}
                   bg="transparent"  h="100%"
                   >
-                  <Image src={item.customImg} w="50" h="100" style={{resizeMode:"contain"}}/>
-                  <Text color="#aba1ca" fontSize={"sm"} textAlign="center" w='80%'>{item.title}</Text>
+                  <Image src={item.customImg} w="80%" h='100' style={{resizeMode:"contain"}} my='3'/>
+                  <Text color="#aba1ca" fontSize={"lg"} textAlign="center" w='85%' mb='3'>{item.title}</Text>
               </Box>
               }}
               </Pressable>
@@ -215,14 +210,13 @@ const TemplatesList = (props : any) => {
           </ScrollView>
           {props.template.loaded &&
             <Center>
-              <View w='80%' m='3' justifyContent={'center'}>
-                <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'} m="1" _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }}  onPress={()=> {Linking.openURL(`data:text/plain;charset=utf-8,${encodeURIComponent(props.template.template.bytes)}`)}} mb="3"><Text color="#aba1ca" fontSize={"md"} bold>Download.GLQ</Text></Button> 
-                <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'}  m="1"  _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }} onPress={() => {Linking.openURL(`https://ide.graphlinq.io/?loadGraph=${props.template.template.idgraphsTemplates}`);}} mb="3"><Text bold color="#aba1ca" fontSize={"md"}>Edit on IDE</Text></Button>
+              <View w='80%' m='5' justifyContent={'center'}>
                 <Button bgColor="#2334ff" borderRadius={'12'} color="white" onPress={() => { props.updateStep();} } isDisabled={!props.graphName} isLoading={props.isLoading} isLoadingText="Loading">Next</Button>
               </View>
             </Center>
           }
-    </Box>
+      </Box>
+    </NativeBaseProvider>
   )
 };
 
