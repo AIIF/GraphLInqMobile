@@ -1,4 +1,4 @@
-import React,{useEffect, useState, Suspense} from "react";
+import React,{useEffect, useState, Suspense, useRef} from "react";
 import {
   Text,
   Link,
@@ -18,11 +18,15 @@ import {
   Spinner,
   FormControl,
   SimpleGrid,
+  Alert,
+  Heading,
+  CheckCircleIcon
+  
 } from "native-base";
 
 
 
-import { Dimensions, Linking } from 'react-native';
+import { Dimensions, Linking, StyleSheet, ViewStyle,  TextStyle, ScrollViewProps,} from 'react-native';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 import PageHeader from '../components/Header/pageHeader';
@@ -78,6 +82,7 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
     setIsLoading(true)
     fetchGraphData(template.template.bytes)
     .then(data => {
+      console.log(data);
       setGraphData(JSON.parse(data))
       setStep(!step)
       setIsLoading(false)
@@ -136,9 +141,9 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
             <TemplatesList selectTemplate={selectTemplate} isLoading={isLoading} templateLoaded={templateLoaded} template={template} templates={templates} fileUpload={fileUpload} graphName={graphName} setGraphName={setGraphName} updateStep={updateStep} />
           }
           {!step &&
-            <Suspense fallback="loading">
-              <TemplateVars templateData={graphData} graphName={graphName} templateName={template.template.title} templateDesc={template.template.description} step={step} setStep={setStep} />
-            </Suspense>
+            
+            <TemplateVars templateData={graphData} graphName={graphName} templateName={template.template.title} templateDesc={template.template.description} step={step} setStep={setStep} />
+            
           }
 
           <Box justifyContent={"stretch"}  bg="rgb(32,27,64)" flexDirection={"column"} borderRadius="12" p={["7","10","15"]}>
@@ -170,14 +175,14 @@ const TemplatesList = (props : any) => {
   return (
       <Box justifyContent={"center"} flexDirection={"column"} bg="rgb(32,27,64)" borderRadius="12" px={["7","10","15"]} py={["3","5","7"]} mb="5">
           <Box justifyContent={"left"} >
-          <Text color="white" fontSize={"xl"} bold mb="3"> Name Your Graph:</Text>
-          <Input variant="underlined" color="#aba1ca" fontSize={"md"} mb="7" placeholder="Graph Name" value={props.graphName} onChange={(e) => { props.setGraphName(e.target.value) }}/>
-          <Text color="white" fontSize={"xl"} bold mb="2"> Templates:</Text>
+            <Text color="white" fontSize={"xl"} bold mb="3"> Name Your Graph:</Text>
+            <Input variant="underlined" color="#aba1ca" fontSize={"md"} mb="7" placeholder="Graph Name" value={props.graphName} onChange={(e) => { props.setGraphName(e.target.value) }}/>
+            <Text color="white" fontSize={"xl"} bold mb="2"> Templates:</Text>
           </Box>
           
           <ScrollView h="200">
-          {props.templateLoaded
-          ? <FlatList numColumns={2} m="1" data={props.templates}//props.templates
+          {props.templateLoaded?
+           <FlatList numColumns={2} m="1" data={props.templates}//props.templates
               renderItem={({
                 item
               }) => {
@@ -193,7 +198,7 @@ const TemplatesList = (props : any) => {
                   bg="transparent"  h="100%"
                   >
                   <Image src={item.customImg} w="50" h="100" style={{resizeMode:"contain"}}/>
-                  <Text color="#aba1ca" fontSize={"xs"} textAlign="center">{item.title}</Text>
+                  <Text color="#aba1ca" fontSize={"sm"} textAlign="center" w='80%'>{item.title}</Text>
               </Box>
               }}
               </Pressable>
@@ -209,106 +214,171 @@ const TemplatesList = (props : any) => {
           }
           </ScrollView>
           {props.template.loaded &&
-              <Center>
-                <View w='80%'m='2' justifyContent={'center'}>
-                  <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'} m="1" _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }}  onPress={()=> {Linking.openURL(`data:text/plain;charset=utf-8,${encodeURIComponent(props.template.template.bytes)}`)}}><Text color="#aba1ca" fontSize={"md"} bold>Download.GLQ</Text></Button>
-                  <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'}  m="1"  _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }} onPress={() => {Linking.openURL(`https://ide.graphlinq.io/?loadGraph=${props.template.template.idgraphsTemplates}`);}}><Text bold color="#aba1ca" fontSize={"md"}>Edit on IDE</Text></Button>
-                  <Button bgColor="#2334ff" borderRadius={'12'} _pressed={{transform: [{scale: 0.96}]}} color="white"  _hover={{ bgColor: "#202cc3" }} onClick={() => { props.updateStep(); console.log(props.graphName)} } isDisabled={!props.graphName} isLoading={props.isLoading} isLoadingText="Loading">Next</Button>
-                </View>
-              </Center>
-            }
+            <Center>
+              <View w='80%' m='3' justifyContent={'center'}>
+                <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'} m="1" _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }}  onPress={()=> {Linking.openURL(`data:text/plain;charset=utf-8,${encodeURIComponent(props.template.template.bytes)}`)}} mb="3"><Text color="#aba1ca" fontSize={"md"} bold>Download.GLQ</Text></Button> 
+                <Button bgColor={'transparent'} borderRadius={"12"} variant={'outline'}  m="1"  _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }} onPress={() => {Linking.openURL(`https://ide.graphlinq.io/?loadGraph=${props.template.template.idgraphsTemplates}`);}} mb="3"><Text bold color="#aba1ca" fontSize={"md"}>Edit on IDE</Text></Button>
+                <Button bgColor="#2334ff" borderRadius={'12'} color="white" onPress={() => { props.updateStep();} } isDisabled={!props.graphName} isLoading={props.isLoading} isLoadingText="Loading">Next</Button>
+              </View>
+            </Center>
+          }
     </Box>
   )
 };
 
-const graphDetails = {
-  template: [
-      "Watcher Coingecko Bitcoin Price Print",
-      "Watcher Gas price From Ethereum Chain",
-      "Watch New Ethereum Blocks",
-      "Pancake Swap Pair Watcher",
-      "Watch Unicrypt New Deposit",
-      "Watch Unicrypt Presale Telegram"
-  ],
-  description: [
-      'Watch over bitcoin price on Coingecko and print result',
-      'Watch ethereum gas price in real time',
-      'Watch events from every new blocks received on the Ethereum Chain',
-      'Watch over a pair on pancake and get notified on new swaps',
-      'Watch new deposit on UniCrypt platform',
-      'Watch activities on a specific presale from Unicrypt and report to Telegram',
-  ],
-  templateParams: [
-      {
-          id:"1",
-          title: 'Watch Interval (in seconds)',
-          value: '300'
-      },
-      {
-          id:"2",
-          title: 'Symbol to watch',
-          value: 'bitcoin'
-      },
-      {
-          id:"3",
-          title: 'Log Message',
-          value: 'Bitcoin price is {0}$ for 24h change of {1}'
-      },
-      {
-          id:"4",
-          title: 'Message variable (Price)',
-          value: '{0}'
-      },
-      {
-          id:"5",
-          title: 'Message variable (MarketCap Change 24h)',
-          value: '{1}'
-      },
-  ]
-};
+interface TemplateRoot {
+  name: string
+  nodes: TemplateNode[]
+  comments: any[]
+}
+
+interface TemplateNode {
+  id: string
+  type: string
+  out_node?: string
+  can_be_executed: boolean
+  can_execute: boolean
+  friendly_name: string
+  block_type: string
+  _x: number
+  _y: number
+  in_parameters: TemplateInParameter[]
+  out_parameters: TemplateOutParameter[]
+}
+
+interface TemplateInParameter {
+  id: string
+  name: string
+  type: string
+  value: any
+  assignment: string
+  assignment_node: string
+  value_is_reference: boolean
+}
+
+interface TemplateOutParameter {
+  id: string
+  name: string
+  type: string
+  value?: string
+  assignment: string
+  assignment_node: string
+  value_is_reference: boolean
+}
 
 const TemplateVars = (props:any) => {
 
-  const [deployButtonClick, setDeployButtonClick] = useState(false);
+  const [decompTemplate, setDecompTemplate] = useState<TemplateRoot>(props.templateData)
+  const [compressedTemplate, setCompressedTemplate] = useState<any>()
 
-  const ShowAlertWithDelay=()=>{
+  const [fields, setFields] = useState(new Map())
 
-      setTimeout(function(){
-              
-      }, 1000);
-  }  
+  const handleChange = (i: any, v: any, node: TemplateNode) => {
+    setFields(new Map(fields.set(i, v)));
+    setDecompTemplate((decompTemplate) => {
+      node.out_parameters[0].value = v
+      return ({
+        ...decompTemplate
+      })
+    })
+  }
+
+  useEffect(() => {
+    decompTemplate?.nodes
+    .filter(node => node.block_type === "variable" && node.friendly_name !== "do_not_show")
+    .map((node, i: number) => (
+      handleChange(i, node.out_parameters[0].value, node)
+    ))
+  }, [])
+
+  const compressGraph = async (template: any) => {
+    const compData = await GraphService.compressGraph(template)
+    setCompressedTemplate(compData)
+    return compData
+  }
+
+  const previous = () => {
+    props.setStep(true)
+    setFields(new Map())
+  }
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function deployGraphTemplate(data: any, name: any) {
+    try {
+      const result: String | undefined = await GraphService.deployGraph({
+        state: GraphStateEnum.Starting,
+        bytes: data,
+        alias: name,
+        hash: undefined
+      })
+
+      if (result instanceof String) {
+        setSuccess(`${result}`)
+      } else {
+        setError('Your graph file was incomplete or invalid, please check it on the IDE')
+      }
+    }
+    catch (e) {
+      console.error(e)
+      setError('An error occured while trying to parse your file, please try again')
+    }
+    executeScroll()
+  }
+
+  async function deployTemplate() {
+    setIsLoading(true)
+    compressGraph(JSON.stringify(decompTemplate))
+        .then(data => {
+            deployGraphTemplate(data, props.graphName)
+            setIsLoading(false)
+        })
+  }
+  
+  const resultRef = useRef<HTMLInputElement>(null)
+
+  const executeScroll = () => resultRef.current?.scrollIntoView()
 
   return (
-       <VStack justifyContent={"center"} bg="rgb(32,27,64)" borderRadius="12" px={["7","10","15"]} py={["3","5","7"]} mb="5">
-          <Text color="white" fontSize={"xl"} bold mb="3"> {props.graphName}:</Text>
-          <Text color="#aba1ca" fontSize={"lg"} mb="3">Template: {graphDetails.template[props.templateID]}</Text>
-          <Text color="#aba1ca" fontSize={"lg"} mb="3">Description: {graphDetails.description[props.templateID]}</Text>
-          {graphDetails.templateParams.map((element) => {
-              return (
-                  <VStack mb="3" key={element.id}>
-                      <FormControl isRequired>
-                          <FormControl.Label color="#aba1ca" fontSize={"lg"}>{element.title}</FormControl.Label>
-                          <Input variant={"underlined"} color="#aba1ca" fontSize={"sm"} value={element.value} />
-                      </FormControl>
-                  </VStack>
-              );
-          })
-          }
-          <HStack justifyContent={"right"} my="5">
-              <Button variant={"outline"} borderRadius="12" borderColor={"#aba1ca"} mr="3" onPress={() => {}}>
-                  <Text color="#aba1ca" fontSize={"md"} bold >Previous</Text>
-              </Button> 
-              <Button variant={"solid"} borderRadius="12" onPress={() => {setDeployButtonClick(true);}}>
-              {deployButtonClick===false?
-              (<Text color="white" fontSize={"md"} bold >Deploy</Text>)
-              :(<View flexDirection={"row"}>
-                      <Spinner color="white" size="sm" accessibilityLabel="Loading posts" mx="3"/>
-                      <Text color="white" bold fontSize={"lg"}>Loading</Text>
-                  </View>)
-              }
-              </Button>
-          </HStack>
-      </VStack>
+    <Box justifyContent={"center"} flexDirection={"column"} bg="rgb(32,27,64)" borderRadius="12" px={["7","10","15"]} py={["3","5","7"]} mb="5" flex='1' w={windowWidth*0.9}>
+       {success &&
+          <Box justifyContent={"stretch"} alignItems="center" bg="rgb(35,35,60)" flexDirection={"row"} borderRadius="15" px={"2"} mb={'3'}>
+            <Icon as={Ionicons} name="checkmark-circle-outline" color="#59b819" size='lg' mr='1'/>
+            <Text fontSize="sm" color="#ece7fd"  mb='2' numberOfLines={10}>
+              <b>Graph Successfully started, Congratulations !</b><br></br>
+              {decompTemplate?.name || 'Template'} execution unique hash :<br></br>
+              {success}
+            </Text>
+          </Box>
+      }
+      {error &&
+          <Box style={{ marginBottom: "15", marginTop: "15" }} ref={resultRef}>
+            <Icon as={Ionicons} name="close-circle-outline" size='lg' mr='1'/>
+            <Text fontSize={"xs"} color={'#ece7fd'}>{error}</Text>
+          </Box>
+      }
+      <Box justifyContent={'left'} alignItems='flex-start'>
+        <Text fontSize="md" color="#ece7fd" bold mb='3'>{props.graphName} :</Text>
+        <Text fontSize="md" color="#c4b9e5" mb='3'><b>Template:</b> {props.templateName}</Text>
+        <Text fontSize='md' color="#c4b9e5" mb='3'><b>Description:</b> {props.templateDesc}</Text>
+      </Box>
+      <Box>
+        {decompTemplate?.nodes
+          .filter(node => node.block_type === "variable" && node.friendly_name !== "do_not_show")
+          .map((node, i: number) => (
+            <FormControl my="5" key={node.id} isRequired>
+              <FormControl.Label>{node.friendly_name} :</FormControl.Label>
+              <Input color="#c4b9e5" type="text" variant="underlined" placeholder={node.friendly_name} value={fields.get(i) || node.out_parameters[0].value || ''} onChange={(e) => handleChange(i, e.target.value, node)} />
+            </FormControl>
+        ))}
+      </Box>
+      <Box justifyContent={'right'} my="3" flexDirection="row">
+        <Button bgColor="transparent" variant="outline" _text={{color:"#c4b9e5"}} borderColor="#aba1ca" color="#aba1ca" _hover={{ bgColor: "#2334ff", borderColor: '#2334ff', color: "white" }} mr="5" onPress={previous}>Previous</Button>
+        <Button bgColor="#2334ff" color="white" _hover={{ bgColor: "#202cc3" }} onPress={()=> {console.log(props.graphName); console.log(props.templateName);console.log(props.templateDesc); deployTemplate();}} isLoading={isLoading} isLoadingText="Loading">Deploy</Button>
+      </Box>
+    </Box>
   )
 };
 

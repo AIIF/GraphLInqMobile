@@ -87,7 +87,7 @@ const navigation = useNavigation();
         </Modal.Content>
       </Modal>
 
-      <Pressable onPress={()=>navigation.toggleDrawer()} pr="1" >
+      <Pressable onPress={()=>navigation.toggleDrawer()}>
         {({isPressed}) => {
           return <LinearGradient
             colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
@@ -109,16 +109,16 @@ const navigation = useNavigation();
         }}
       </Pressable>
       <View justifyContent={"center"} flexDirection="row" alignItems={"center"}>
-        <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" m={"2"} px={["3","5","7","10"]} py={"2"}>
-            <Text fontSize={"lg"} color="#aba1ca">GLQ:</Text>
-            <Text fontSize={"md"} color="#aba1ca" bold>{glqPrice}</Text>
+        <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" m={"2"} px={'3'} py={"2"}>
+            <Text fontSize={"md"} color="#aba1ca">GLQ:</Text>
+            <Text fontSize={"sm"} color="#aba1ca" bold>{glqPrice}</Text>
         </Box>
         {account !== undefined && windowWidth>=400 && (
           <VStack>
-            <Box bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"3"} py={"1"} mb="1" w="100" alignSelf={"center"}>
-                <Text fontSize={["md","lg"]} color="#aba1ca">{amountBalance} GLQ</Text>
+            <Box bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"2"} py={"1"} mb="1" w="100" alignSelf={"center"}>
+                <Text fontSize={"md"} color="#aba1ca">{amountBalance} GLQ</Text>
             </Box>
-            <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"3"} py={"1"} justifyContent={"center"}>
+            <Box flexDirection={"column"} bg="black" alignItems={"center"} borderRadius="32" mr={"3"} px={"2"} py={"1"} justifyContent={"center"}>
                 <Text fontSize={"xs"} color="#aba1ca">{ shortenAddress(account)}</Text>
             </Box>
           </VStack>

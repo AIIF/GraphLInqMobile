@@ -29,14 +29,13 @@ const WalletManager = (props: any) => {
 
     const { active, account, connector, activate, error, library } = useWeb3React();
 
-    let verify = false;
-
     useEffect(() => {
         if (!account) { return }
         if (WalletService.verifySessionIntegrity(account)) {
-          verify = true;
+          {props.onPageChanged('Home')}
+          return
         }
-          (async () => {
+        (async () => {
             console.log(activate)
             let web3: any = undefined
             let signature: string = ""
@@ -58,9 +57,6 @@ const WalletManager = (props: any) => {
                   account,
                 },
               });
-              console.log("result: ",result);
-            }
-            if(verify === true){
               {props.onPageChanged('Home')}
             }
         })()
