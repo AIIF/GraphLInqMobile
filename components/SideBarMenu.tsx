@@ -21,8 +21,8 @@ import {
 
 const Logo = require('../assets/logo.svg');
 
-import ModalDeposit from './Modal/ModalDeposit';
-import ModalWithdraw from './Modal/ModalWithdraw';
+import ModalDeposit from './ContractBalance/ModalDeposit';
+import ModalWithdraw from './ContractBalance/ModalWithdraw';
 
 const CustomSidebarMenu = (props: any) => {
   const [depositModalVisible, setDepositModalVisible] = useState(false);

@@ -1,4 +1,4 @@
-import React,{ReactChildren, useState} from "react";
+import React,{ReactChildren, useEffect, useState} from "react";
 import {
   Text,
   Link,
@@ -22,12 +22,23 @@ import {
   FlatList,
   Hidden,
   useContrastText,
-  Card
+  Card,
+  Flex,
+  Spacer
 } from "native-base";
 
 import { Dimensions, Linking,StyleSheet } from 'react-native';
 import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
 import PageHeader from "../components/Header/pageHeader";
+
+import GraphCard from '../components/Graphs/GraphCard';
+import { GraphResponse } from '../providers/responses/graph';
+import { useDispatch, useSelector } from "react-redux";
+import { useWeb3React } from "@web3-react/core";
+
+import GraphService from '../services/graphService';
+import { GRAPH_UPDATE } from '../redux/actions';
+import { SuspenseSpinner } from '../components/SuspenseSpinner';
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
@@ -40,99 +51,79 @@ const config = {
   }
 };
 
-const menuItems =[{
-  name : "play-outline",
-  desc : "Start",
-  color : 'green.900',
-}, {
-  name : "play-outline",
-  desc : "Force start",
-  color : 'green.900'
-}, {
-  name : "stop-outline",
-  desc : "Stop",
-  color : 'blue.900'
-}, {
-  name : "document-outline",
-  desc : "Export as .GLQ File",
-  color : 'blue.900'
-}, {
-  name : "trash-outline",
-  desc : "Delete",
-  color : 'red.900'
-},{
-  name : "eye-outline",
-  desc : "View Logs",
-  color : 'white'
-}
-];
 
 const graphs = (props: any) => {
-  const [detailModalVisible, setDetailModalVisible] = useState(false);
+  const [reachable, setReacheable] = useState(true)
+    const { account } = useWeb3React();
+    const dispatch = useDispatch();
 
-  const onModalVisibleChanged = (detailModalVisible: any) => {
-    setDetailModalVisible(detailModalVisible);
-  }
+    const graphsList: GraphResponse[] = useSelector(
+        (state: any) => state.modals.graphs.list
+    );
+
+    const loaded: boolean = useSelector(
+        (state: any) => state.modals.graphs.loaded
+    );
+
+    useEffect(() => {
+        const refreshfnc = async () => {
+            const graphs: GraphResponse[] | undefined = await GraphService.listGraphs();
+            if (graphs === undefined) {
+                return setReacheable(false)
+             }
+
+            dispatch({
+                name: "graphs",
+                type: GRAPH_UPDATE,
+                payload: { graphs, loaded: true },
+            })
+
+            setTimeout(refreshfnc, 10000)
+        };
+
+        refreshfnc()
+    }, [account])
 
   return (
   <NativeBaseProvider config={config}>
     <View style={{ flex: 1 }} justifyContent="space-between" bg="darkBlue.900" width={windowWidth} height={windowHeight} >
       <ScrollView flexDirection={"column"} p={["7","10"]} >
-      <Modal isOpen={detailModalVisible} onClose={setDetailModalVisible} size={"lg"} borderRadius="32" >
-        <Modal.Content maxH="250" borderRadius="15">
-          <Modal.CloseButton />
-            <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="#aba1ca" fontSize={"lg"}>More</Text></Modal.Header>
-            <Modal.Body bg="darkBlue.900">
-              {menuItems.map((item) => {
-                return <Pressable key={item.name}> 
-                {({isPressed}) => {
-                  return <Box m="2" flexDirection={"row"} justifyContent="left" px="2" alignItems={"center"}>
-                    <Icon as={Ionicons} name={item.name} size="sm" color={item.color}/>
-                    <Text color="#aba1ca" fontSize={"md"} > {item.desc} </Text>
-                  </Box>
-                }}
-                </Pressable>
-              })}
-          </Modal.Body>
-        </Modal.Content>
-      </Modal>
-
-      <PageHeader title="Graphs" buttonName="New Graph" iconName="add-circle-outline" iconAs={Ionicons} eventChanged={() => props.onContentChanged('Home')} />
-
-      <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]}>
-        <Icon as={Ionicons} name="information-circle-outline" size="4" color="blue.800"/>
-        <Text color="#aba1ca" fontSize={"ms"} p="1" lineHeight={'16'}>
-          Below is the list of your Graphs. You can view logs, stop or delete each one of them.
-        </Text>
-      </Box>
-      
-      <Box bg="rgb(32,27,64)" flexDirection={"column"} borderRadius="12" p={["3","5","7"]}>
-        <VStack>
-          <HStack justifyContent={"space-between"} mb="3">
-            <HStack>
-              <Icon size="xs" as={Ionicons} name={"ellipse"} color="green.900" m="1"/>
-              <VStack>
-                <Text color="#aba1ca" fontSize={"sm"} > Demo </Text>
-                <Text color="#aba1ca" fontSize={"xs"} > 13d6664fd694ae55967c5cd7aa56a82... </Text>
-              </VStack>
-            </HStack>
-            <Pressable onPress={() => setDetailModalVisible(true)}>
-              <Icon size={"lg"} as={Ionicons} name={"ellipsis-vertical-circle-outline"} color="#aba1ca" />
-            </Pressable>   
-          </HStack>
-
-          <VStack justifyContent={"left"}>
-            <Text color="#aba1ca" fontSize={"sm"} > Hosted API : </Text>
-            <Text color="#aba1ca" fontSize={"md"} mb="2" bold pl="5"> </Text>
-            <Text color="#aba1ca" fontSize={"sm"} > Execution cost : </Text>
-            <Text color="#aba1ca" fontSize={"md"} mb="2" bold pl="5"> 0.02799000 GLQ</Text>
-            <Text color="#aba1ca" fontSize={"sm"} > Running since : </Text>
-            <Text color="rgb(126,127,164)" fontSize={"md"} mb="2" bold pl="5"> 122 hours, 26.94 minutes</Text>
-            <Text color="rgb(126,127,164)" fontSize={"sm"} > Created : </Text>
-            <Text color="rgb(126,127,164)" fontSize={"md"} mb="2" bold pl="5"> 12/28/2022, 4:51:26 AM</Text>
-            </VStack>
-        </VStack>
-      </Box>
+        <Text fontSize={"xl"} color="white" textAlign={"center"} bold mb='3'>Graphs</Text>
+        <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]}>
+          <Icon as={Ionicons} name="information-circle-outline" size="4" color="blue.800"/>
+          <Text color="#aba1ca" fontSize={"sm"} p="1" lineHeight={'16'}>
+            Below is the list of your Graphs. You can view logs, stop or delete each one of them.
+          </Text>
+        </Box>
+        {reachable && !loaded &&
+        <SuspenseSpinner/>}
+        {!reachable &&
+          <View flexDirection='row' justifyContent='center' alignItems='center' bg='rgb(32,27,64)' borderRadius={'32'} p='3' my='1'>
+            <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='sm' mr='2'/>
+            <Text color='white' fontSize={'ms'}>The engine main-net network can't be reached, please try again later or contact the <i>GraphLinq Support</i>.</Text>
+          </View>
+        }
+        {graphsList.length == 0 && loaded &&
+          <View flexDirection='row' justifyContent='center' alignItems='center' bg='rgb(32,27,64)' borderRadius={'32'} p='3' my='1'>
+            <Icon as={Ionicons} name="warning-outline" color='yellow.600' size='sm' mr='2'/> 
+            <Text color='white' fontSize={'sm'}>You don't have created or deployed any graph yet, refer to our 
+            <Link marginLeft="1"
+              href="https://docs.graphlinq.io/graph"
+              isExternal _text={{color:'amber.600'}} 
+              _hover={{ color: 'amber.700' }}
+              display={{ base: 'block', sm: 'revert' }}
+              >documentation</Link> 
+              to start your journey.
+            </Text>
+          </View>
+        }
+        {graphsList.length > 0 &&
+          <VStack mb={1} >
+            {graphsList.sort((a: GraphResponse, b: GraphResponse) => { return b.state - a.state }).map((x: GraphResponse, i: number) => {
+              return <GraphCard key={`graph-${i}`} GraphInfo={x} />
+            })}
+          </VStack>
+        }
       </ScrollView>
     </View>
   </NativeBaseProvider>

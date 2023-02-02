@@ -1,17 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Icon, Text, Alert, AlertDescription, AlertIcon, AlertTitle, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Stack, useDisclosure } from '@chakra-ui/react';
+import React,{useState, useEffect} from 'react';
+import {
+  View,
+  Image,
+  Text,
+  Link,
+  Box,
+  Icon,
+  Button,
+  Modal,
+  IconButton,
+  Pressable,
+  useDisclose,
+  Stack
+} from 'native-base';
+
+import { StyleSheet, SafeAreaView, Linking} from 'react-native';
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { FiArrowDownLeft } from 'react-icons/fi';
 import { useActiveWeb3React } from '../../hooks';
 import WalletService from '../../services/walletService';
 import { ResponseSuccess } from '../../providers/responses/success';
 import { useWalletContract } from '../../hooks/useWalletContract';
 
-interface ModalWithdrawProps {
+const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
-}
+const ModalWithdraw = (props:any) => {
+    const [depositNum, setDepositNum] = useState("0.0");
 
-export const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclose()
     const finalRef = React.useRef()
     const { account } = useActiveWeb3React()
     const [dueBalance, setDueBalance] = useState(0)
@@ -65,58 +81,79 @@ export const ModalWithdraw: React.FC<ModalWithdrawProps> = ({ }) => {
     }
 
     return (
-        <>
-            <button className="sbt" ref={finalRef as any} onClick={onOpen}>Withdraw <i className="fal fa-long-arrow-down"></i></button>
-            <Modal finalFocusRef={finalRef as any} isOpen={isOpen} onClose={onClose} key="test" isCentered>
-                <ModalOverlay className="ov" />
-                <ModalContent className="mod mod-dep">
-                    <header><h2>Cloud Balance Withdraw</h2></header>
-                    <ModalCloseButton className="clo" />
-                    <ModalBody class="fred">
-                        <Stack spacing={3} p="4">
-                            {error &&
-                            <Alert status="error">
-                                <i className="fal fa-times-circle"></i> 
-                                <p>{error}</p>
-                            </Alert>
-                            }
-                            {!success && pending &&
-                            <Alert status="info">
-                                <i className="fal fa-info-circle"></i> 
-                                <p>{pending}</p>
-                            </Alert>
-                            }
-                            {success &&
-                            <Alert status="success">
-                                <i className="fal fa-check-circle"></i>
-                                <p>Withdraw successfully completed !</p>
-                                <p><small>Transaction hash : <a href={`https://etherscan.com/tx/${success}`} target="_blank">{success}</a></small></p>
-                            </Alert>
-                            }
-                            <Alert status="info" className="alert-m">
-                                <i className="fal fa-info-circle"></i>
-                                <p>You currently have <b>{dueBalance} GLQ</b> of execution cost from executed graphs to burn.</p>
-                            </Alert>
-                            <NumberInput className="fd in"
-                                placeholder="GLQ Amount"
-                                onChange={(value) => { setAmountWithdraw(parse(value)) }}
-                                value={format(amountWithdraw)}
-                                size="lg"
-                                defaultValue={0}
-                                min={0}
-                                focusBorderColor="#3907ff"
-                                step={0.1}>
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper color="#3907ff" />
-                                    <NumberDecrementStepper color="#3907ff" />
-                                </NumberInputStepper>
-                            </NumberInput>
-                            <Button onClick={doWithdraw} className="bt">Withdraw</Button>
-                        </Stack>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-        </>
+        <Modal isOpen={props.withdrawModalVisible} onClose={props.setWithdrawModalVisible} size={"lg"}  >
+          <Modal.Content maxH="450" borderRadius="15">
+            <Modal.CloseButton/>
+            <Modal.Header bg="darkBlue.900" borderColor={"darkBlue.900"}><Text color="white" textAlign={"center"} fontSize="xl">Cloud Balance Deposit</Text></Modal.Header>
+            <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center'>
+              <Stack m='1'>
+                {error &&
+                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                    <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='md' mr='2'/>
+                    <Text color="white" fontSize={'sm'}>{error}</Text>
+                  </View>
+                }
+                {!success && pending &&
+                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                    <Icon as={FontAwesome} name="info-circle" color='rgb(32,27,64)' size='md' mr='2'/>
+                    <Text color="white" fontSize={'sm'}>{pending}</Text>
+                  </View>
+                }
+                {success &&
+                  <View textAlign='center' flexDirection='row' justifyContent='center' alignItems='center'  bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                    <Icon as={FontAwesome} name="check-circle" color='#59b819' size='md' mr='2'/>
+                    <Text color='white'>Deposit successfully completed ! </Text>
+                    <Text color='white'><small>Transaction hash : <a href={`https://etherscan.com/tx/${success}`} target="_blank">{success}</a></small></Text>
+                  </View>
+                }
+                <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' m='2'>
+                  <Icon as={FontAwesome} name="info-circle" color='darkBlue.900' size='2xl'/>
+                  <Text color='white'>You currently have <b>{dueBalance} GLQ</b> of execution cost from executed graphs to burn.</Text>
+                </View>
+                <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="90%">
+                <Text color="white" fontSize={"xl"} ml="5">{depositNum} GLQ</Text>
+                <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
+                  <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="7"
+                  icon={<Icon as={Ionicons} name="caret-up" /> } 
+                  _icon={{color:"rgb(32,27,64)", size:"sm"}}
+                  _pressed={{backgroundColor:"white"}}
+                  onPress={() => { setDepositNum((parseFloat(depositNum)+0.1).toString());}}
+                  />
+                  <IconButton variant={"ghost"} borderBottomRightRadius="32" h="5" w="7"
+                  icon={<Icon as={Ionicons} name="caret-down" />} 
+                  _icon={{color:"rgb(32,27,64)", size:"sm"}}
+                  _pressed={{backgroundColor:"white"}}
+                  onPress={() => { if(parseFloat(depositNum) >= 0.1) {setDepositNum((parseFloat(depositNum)-0.1).toString());}}}
+                  />
+                </Box>
+                </Box>
+                
+                <Pressable mt="5" onPress={doWithdraw} w='70%' justifyContent={'center'} alignItems='center' alignSelf={'center'}> 
+                    {({isPressed}) => {
+                        return <LinearGradient
+                            colors={['rgb(56,8,255)', 'rgb(7,125,255)']}
+                            start={[0,0]}
+                            end={[1,0]}
+                            style={{
+                            borderRadius: 32,
+                            alignContent: "center",
+                            transform: [{scale: isPressed ? 0.95 : 1}]
+                            }}
+                            justifyContent="center"
+                            alignItems={"center"} 
+                        >
+                        <View mx='10' style={{borderRadius:32}}  justifyContent="center" p="2" alignItems={'center'} textAlign='center'> 
+                          <Text textAlign={"center"} color="white" fontSize={"sm"} bold>Withdraw</Text>
+                        </View>
+                    </LinearGradient>
+                    }}
+                </Pressable>
+              </Stack>
+              
+            </Modal.Body>
+          </Modal.Content>
+      </Modal>
     );
-}
+};
+
+export default ModalWithdraw;

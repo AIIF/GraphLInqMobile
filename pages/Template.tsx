@@ -118,7 +118,7 @@ const Templates: React.FC<TemplatesProps> = ({ }) => {
   <NativeBaseProvider theme={theme}>
     <View style={{ flex: 1, alignItems: 'center', 
                    justifyContent: 'center' }}  bg="darkBlue.900" width={windowWidth} height={windowHeight}>
-      <ScrollView p={["3","5"]} flexDirection={"column"}>        
+      <ScrollView p={["7","10"]} flexDirection={"column"}>        
         <Text fontSize={"xl"} color="white" textAlign={"center"} bold mb='3'>Template Wizard</Text>
 
         <Box justifyContent={"stretch"} alignItems="center" bg="rgb(32,27,64)" flexDirection={"row"} borderRadius="50" px={["3","5","7"]} mb={["3","5","7"]} shadow={"0"}>
