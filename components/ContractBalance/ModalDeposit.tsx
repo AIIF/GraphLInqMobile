@@ -49,12 +49,12 @@ const ModalDeposit = (props : any) => {
         
         const decimalAmount :any = utils.parseEther(amountDeposit)
         try {
-            const allowance = await tokenContract.allowance(account, "0x9f9c8ec3534c3ce16f928381372bfbfbfb9f4d24");
+            const allowance = await tokenContract.allowance(account, '0x9f9c8ec3534c3ce16f928381372bfbfbfb9f4d24');
             const wei = utils.parseEther('10000000')
             if (parseFloat(allowance) < parseFloat(decimalAmount)) {
                 console.log(`${allowance} vs ${decimalAmount}`)
                 setPending("Allowance pending, please allow the use of your token balance for the contract...")
-                const approveTx = await tokenContract.approve("0x9f9c8ec3534c3ce16f928381372bfbfbfb9f4d24", wei.toString());
+                const approveTx = await tokenContract.approve('0x9f9c8ec3534c3ce16f928381372bfbfbfb9f4d24', wei.toString());
                 setPending("Waiting for confirmations...")
                 await approveTx.wait()
                 setPending("Allowance successfully increased, waiting for deposit transaction...")
@@ -75,19 +75,24 @@ const ModalDeposit = (props : any) => {
         }
         catch (e : any)
         {
-            console.error(e.message)
+            console.error(e)
             if (e.data?.message) { setPending(""); setError(`Error: ${e.data?.message}`);return; }
-            if (e.message) { setPending(""); setError(`Error: ${e.message}`); }
+            
+            if(e.message.includes('user rejected transaction')){
+              setError('Error: MetaMask Tx Signature: User Denied transaction signature.')
+            }else if (e.message) { 
+              setPending(""); setError(`Error: ${e.message}`); 
+            }
         }
     }
 
-    const handleChange = (text : string) => setAmountDeposit(parse(text));
+    const handleChange = (text : string) => setAmountDeposit(text);
 
     return (
         <Modal isOpen={props.depositModalVisible} onClose={props.setDepositModalVisible} size={'md'}>
           <Modal.Content maxH="350" borderRadius="15" justifyContent={'center'}>
-            <Modal.Header bg="darkBlue.900" borderColor={"darkBlue.900"}>
-              <Text color="white" textAlign={"center"} fontSize="md">Cloud Balance Deposit</Text>
+            <Modal.Header bg="rgb(32,27,64)" borderColor={"rgb(32,27,64)"}>
+              <Text color="white" textAlign={"center"} fontSize="xl">Cloud Balance Deposit</Text>
             </Modal.Header>
             <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center' >
                 {error &&

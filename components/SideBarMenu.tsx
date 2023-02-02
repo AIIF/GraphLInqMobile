@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -18,6 +18,8 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import { useWeb3React } from "@web3-react/core";
+import { useWalletContract } from "../hooks/useWalletContract";
 
 const Logo = require('../assets/logo.svg');
 
@@ -27,6 +29,13 @@ import ModalWithdraw from './ContractBalance/ModalWithdraw';
 const CustomSidebarMenu = (props: any) => {
   const [depositModalVisible, setDepositModalVisible] = useState(false);
   const [withdrawModalVisible, setWithdrawModalVisible] = useState(false);
+
+  const { account } = useWeb3React();
+  const {balance, refreshBalanceContract} =  useWalletContract();
+
+  useEffect(()  => {
+        refreshBalanceContract();
+  }, [account])
 
   return (
     <View style={{flex: 1}} bg="rgb(32,27,64)" >
@@ -40,7 +49,7 @@ const CustomSidebarMenu = (props: any) => {
       />
       <Text textAlign={"center"} fontSize="sm" color="#aba1ca" my={"2"}> Cloud Contract Balance</Text>
       <Box bg="black" borderRadius={"32"} mx="10" alignItems={"center"} justifyContent="space-between" flexDirection={"row"} px="3" py="1">
-        <Text  fontSize="xl" color="white" bold>0 </Text>
+        <Text  fontSize="xl" color="white" bold>{balance.amount}</Text>
         <Text  fontSize="xs" color="#aba1ca" >GLQ</Text>
       </Box>
       <Box  alignItems={"center"} justifyContent="center" mx="10" my="2" flexDirection={"row"}>

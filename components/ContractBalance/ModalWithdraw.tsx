@@ -79,8 +79,8 @@ const ModalWithdraw = (props:any) => {
     return (
         <Modal isOpen={props.withdrawModalVisible} onClose={props.setWithdrawModalVisible} size={"lg"}  >
           <Modal.Content maxH="450" borderRadius="15">
-            <Modal.Header bg="darkBlue.900" borderColor={"darkBlue.900"}>
-              <Text color="white" textAlign={"center"} fontSize="md">Cloud Balance Withdraw</Text>
+            <Modal.Header bg="rgb(32,27,64)" borderColor={"rgb(32,27,64)"}>
+              <Text color="white" textAlign={"center"} fontSize="xl">Cloud Balance Withdraw</Text>
             </Modal.Header>
             <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center'>
               <Stack m='1'>
