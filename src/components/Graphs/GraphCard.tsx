@@ -30,7 +30,6 @@ import {
 
 import { Dimensions, Linking,StyleSheet } from 'react-native';
 import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
-import { HiOutlineEye, HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { GraphStatus } from './GraphStatus';
 import { GraphResponse } from '../../providers/responses/graph';
 import { GraphStateEnum } from '../../enums/graphState';

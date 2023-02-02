@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import "@ethersproject/shims";
 import { useDispatch, useSelector } from 'react-redux';
 import { utils } from 'ethers';
 import { UPDATE_BALANCE } from '../redux/actions/index';

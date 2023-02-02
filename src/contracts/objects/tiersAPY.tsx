@@ -1,3 +1,4 @@
+import "@ethersproject/shims";
 import { BigNumber } from "@ethersproject/bignumber";
 import { utils } from 'ethers';
 

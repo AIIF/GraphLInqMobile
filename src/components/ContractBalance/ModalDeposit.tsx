@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 import { useBalanceContract, useTokenContract } from '../../hooks/useContract';
 import { useActiveWeb3React } from '../../hooks';
+import "@ethersproject/shims";
 import { utils } from 'ethers';
 import { useBalance } from '../../hooks/useBalance';
 import { useWalletContract } from '../../hooks/useWalletContract';

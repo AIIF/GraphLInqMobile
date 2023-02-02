@@ -1,3 +1,4 @@
+import "@ethersproject/shims";
 import { Contract } from '@ethersproject/contracts';
 import { getAddress } from '@ethersproject/address';
 import { AddressZero } from '@ethersproject/constants';
