@@ -2,20 +2,16 @@ import React, {useState} from "react";
 import {Image, Pressable, Text, View} from "native-base";
 import {LinearGradient} from "expo-linear-gradient";
 
-type button = {
-    label: string,
-    btnimg: any,
-};
 
-const ImageButton: React.FC<button> = ( 
-    btn : button,
-    props:any
+const ImageButton: React.FC = ( 
+    props: any
 ) : JSX.Element=> {
     const [pressed,setPressed] = useState(false);
     return (
         <Pressable  onPress={() => {
             setPressed(true);
-            props.MetaMaskConnect();
+            props.onMetaMaskConnect();
+            props.onPageChanged('Main');
         }}>
             {({isHovered, isPressed,isFocused}) => {
                 return <LinearGradient
@@ -38,8 +34,8 @@ const ImageButton: React.FC<button> = (
                           bg={isPressed? "darkBlue.900" :"#15122b"}
                           px={["5","10","30","50"]}
                           py={"2"}>
-                        <Text fontSize={["xl","2xl","3xl","4xl"]} color="rgb(136,127,164)"> {btn.label}</Text>
-                        <Image src={btn.btnimg} style={{resizeMode:"contain"}} w={["6","8","10","12"]} h="full" ></Image>
+                        <Text fontSize={["xl","2xl","3xl","4xl"]} color="rgb(136,127,164)"> {props.label}</Text>
+                        <Image src={props.btnimg} style={{resizeMode:"contain"}} w={["6","8","10","12"]} h="full" ></Image>
                     </View>
                 </LinearGradient>
             }}

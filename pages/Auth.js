@@ -32,8 +32,8 @@ const isMetaMaskInstalled = () => {
 function MetaMaskConnect() {
   //Now we check to see if Metmask is installed
   if (!isMetaMaskInstalled()) {
-      
       onboarding.startOnboarding();
+      
   } else {
       try {
           // Will open the MetaMask UI
@@ -110,7 +110,12 @@ function Content() {
   )
 }
 
-export default function Auth() {
+export default function Auth(props) {
+
+  function onMetaMaskConnect()
+  {
+    MetaMaskConnect();
+  }
 
   return ( 
     <NativeBaseProvider config={config} theme={theme}>
@@ -165,11 +170,16 @@ export default function Auth() {
             alignSelf="center"/>
             {isMetaMaskInstalled()?
             <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
-              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}/>
+              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}  onMetaMaskConnect={onMetaMaskConnect} onPageChanged={props.onPageChanged}/>
             </View>
-            :null
+            :
+            <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
+              <View mb={["5","5","5","10"]}> <ImageButton label={"WalletConnect"} btnimg={require('../assets/icons/walletConnect.svg')} /> </View>
+              <View mb={["5","5","5","10"]}> <ImageButton label={"Open in Coinbase Wallet"} btnimg={require('../assets/icons/coinbaseWallet.svg')} /> </View> 
+              <View mb={["5","5","5","10"]}> <ImageButton label={"Fortmatic"} btnimg={require('../assets/icons/fortmatic.svg')}/> </View>
+            </View>
             }
-            
+            {/* onPress={metamaskConnectable==true?MetaMaskConnect():null} */}
             
           </Box>
           <View flexDirection={"row"} justifyContent={"center"} 
