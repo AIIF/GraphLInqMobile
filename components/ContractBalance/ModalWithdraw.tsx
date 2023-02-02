@@ -1,22 +1,20 @@
 import React,{useState, useEffect} from 'react';
 import {
   View,
-  Image,
   Text,
   Link,
   Box,
   Icon,
-  Button,
   Modal,
   IconButton,
   Pressable,
   useDisclose,
-  Stack
+  Stack,
+  Input,
+  HStack
 } from 'native-base';
 
-import { StyleSheet, SafeAreaView, Linking} from 'react-native';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { FiArrowDownLeft } from 'react-icons/fi';
 import { useActiveWeb3React } from '../../hooks';
 import WalletService from '../../services/walletService';
 import { ResponseSuccess } from '../../providers/responses/success';
@@ -25,10 +23,6 @@ import { useWalletContract } from '../../hooks/useWalletContract';
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
 const ModalWithdraw = (props:any) => {
-    const [depositNum, setDepositNum] = useState("0.0");
-
-    const { isOpen, onOpen, onClose } = useDisclose()
-    const finalRef = React.useRef()
     const { account } = useActiveWeb3React()
     const [dueBalance, setDueBalance] = useState(0)
     const [amountWithdraw, setAmountWithdraw] = useState("0.0");
@@ -80,17 +74,20 @@ const ModalWithdraw = (props:any) => {
         }, 1000)
     }
 
+    const handleChange = (text : string) => setAmountWithdraw(parse(text));
+
     return (
         <Modal isOpen={props.withdrawModalVisible} onClose={props.setWithdrawModalVisible} size={"lg"}  >
           <Modal.Content maxH="450" borderRadius="15">
-            <Modal.CloseButton/>
-            <Modal.Header bg="darkBlue.900" borderColor={"darkBlue.900"}><Text color="white" textAlign={"center"} fontSize="xl">Cloud Balance Deposit</Text></Modal.Header>
+            <Modal.Header bg="darkBlue.900" borderColor={"darkBlue.900"}>
+              <Text color="white" textAlign={"center"} fontSize="md">Cloud Balance Withdraw</Text>
+            </Modal.Header>
             <Modal.Body bg="rgb(32,27,64)" alignItems={"center"} justifyContent='center'>
               <Stack m='1'>
                 {error &&
-                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1'>
+                  <View  textAlign='center' flexDirection='row' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' my='1' display={'flex'} w='90%'>
                     <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='md' mr='2'/>
-                    <Text color="white" fontSize={'sm'}>{error}</Text>
+                    <Text color="white" fontSize={'sm'} numberOfLines={5}>{error}</Text>
                   </View>
                 }
                 {!success && pending &&
@@ -106,26 +103,41 @@ const ModalWithdraw = (props:any) => {
                     <Text color='white'><small>Transaction hash : <a href={`https://etherscan.com/tx/${success}`} target="_blank">{success}</a></small></Text>
                   </View>
                 }
-                <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' m='2'>
+                <View textAlign='center' flexDirection='column' justifyContent='center' alignItems='center' bg='#3e2f70' borderRadius={'32'} p='3' m='3'>
                   <Icon as={FontAwesome} name="info-circle" color='darkBlue.900' size='2xl'/>
                   <Text color='white'>You currently have <b>{dueBalance} GLQ</b> of execution cost from executed graphs to burn.</Text>
                 </View>
+
                 <Box bg="black" borderRadius={"32"} mx="3" flexDirection={"row"} alignItems="center" justifyContent={"space-between"} w="90%">
-                <Text color="white" fontSize={"xl"} ml="5">{depositNum} GLQ</Text>
-                <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
-                  <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="7"
-                  icon={<Icon as={Ionicons} name="caret-up" /> } 
-                  _icon={{color:"rgb(32,27,64)", size:"sm"}}
-                  _pressed={{backgroundColor:"white"}}
-                  onPress={() => { setDepositNum((parseFloat(depositNum)+0.1).toString());}}
-                  />
-                  <IconButton variant={"ghost"} borderBottomRightRadius="32" h="5" w="7"
-                  icon={<Icon as={Ionicons} name="caret-down" />} 
-                  _icon={{color:"rgb(32,27,64)", size:"sm"}}
-                  _pressed={{backgroundColor:"white"}}
-                  onPress={() => { if(parseFloat(depositNum) >= 0.1) {setDepositNum((parseFloat(depositNum)-0.1).toString());}}}
-                  />
-                </Box>
+                  {/* <Text color="white" fontSize={"xl"} ml="5">{amountWithdraw} GLQ</Text> */}
+                  <Input color='white' value={amountWithdraw} fontSize='xl' variant={'unstyled'} bg='transparent' size='sm' flex='7' onChangeText={handleChange}/>
+                  <HStack flex='3' justifyContent={'right'} alignItems='center'>
+                    <Text textAlign={'center'} color='white' fontSize="sm" bg='transparent' mr='2'>GLQ</Text>
+                    <Box flexDirection={"column"} borderLeftColor={"rgb(32,27,64)"} borderLeftWidth="1">
+                      <IconButton variant={"ghost"} borderTopRightRadius="32" h="5" w="5"
+                      icon={<Icon as={Ionicons} name="caret-up" /> } 
+                      _icon={{color:"rgb(32,27,64)", size:"sm"}}
+                      _pressed={{backgroundColor:"white"}}
+                      onPress={() => {
+                        let currentAmount = parseFloat(amountWithdraw);
+                        currentAmount += 0.1;
+                        setAmountWithdraw(currentAmount.toString()); 
+                      }}
+                      />
+                      <IconButton variant={"ghost"} borderBottomRightRadius="32" h="5" w="5"
+                      icon={<Icon as={Ionicons} name="caret-down" />} 
+                      _icon={{color:"rgb(32,27,64)", size:"sm"}}
+                      _pressed={{backgroundColor:"white"}}
+                      onPress={() => {
+                        let currentAmount= parseFloat(amountWithdraw);
+                        if(currentAmount > 0.0){
+                          currentAmount -= 0.1;
+                          setAmountWithdraw(currentAmount.toString()); 
+                        }
+                      }}
+                      />
+                    </Box>
+                  </HStack>
                 </Box>
                 
                 <Pressable mt="5" onPress={doWithdraw} w='70%' justifyContent={'center'} alignItems='center' alignSelf={'center'}> 

@@ -22,25 +22,18 @@ import {
   Heading,
   CheckCircleIcon,
   NativeBaseProvider,
-  extendTheme
+  extendTheme,
+  Stack
   
 } from "native-base";
-
-
 
 import { Dimensions, Linking, StyleSheet, ViewStyle,  TextStyle, ScrollViewProps,} from 'react-native';
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
-import PageHeader from '../components/Header/pageHeader';
 import GraphService from "../services/graphService";
 
-import { HiOutlineCheckCircle, HiOutlineInformationCircle } from 'react-icons/hi';
 import { GraphStateEnum } from '../enums/graphState';
 import { GraphTemplate } from '../providers/responses/templateGraph';
-import { SuspenseSpinner } from '../components/SuspenseSpinner';
-import { RadioCard } from "../components/GraphCreation/RadioCard";
-import { TemplateCard } from "../components/GraphCreation/TemplateCard";
-import { useRadio, useRadioGroup } from "@react-native-aria/radio";
 
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
@@ -198,14 +191,12 @@ const TemplatesList = (props : any) => {
               }}
               </Pressable>
             }} />
-              : 
-              <View alignItems={'center'} justifyContent="center">
+              : <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'> 
                 <Spinner
-                  color="#15122b"
-                  size={"md"}
-                  
+                  color="#2334ff"
+                  size="md"
                 />
-              </View>
+              </Stack>
           }
           </ScrollView>
           {props.template.loaded &&

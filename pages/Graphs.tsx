@@ -24,7 +24,9 @@ import {
   useContrastText,
   Card,
   Flex,
-  Spacer
+  Spacer,
+  Stack,
+  Spinner
 } from "native-base";
 
 import { Dimensions, Linking,StyleSheet } from 'react-native';
@@ -96,7 +98,13 @@ const graphs = (props: any) => {
           </Text>
         </Box>
         {reachable && !loaded &&
-        <SuspenseSpinner/>}
+        <Stack w='100' justifyContent={'center'} alignItems='center' alignSelf='center' mt='30'> 
+          <Spinner
+            color="#2334ff"
+            size="md"
+          />
+        </Stack>
+        }
         {!reachable &&
           <View flexDirection='row' justifyContent='center' alignItems='center' bg='rgb(32,27,64)' borderRadius={'32'} p='3' my='1'>
             <Icon as={FontAwesome} name="times-circle" color='#ff294c'  size='sm' mr='2'/>
