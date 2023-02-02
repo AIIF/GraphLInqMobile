@@ -23,28 +23,6 @@ import ImageButton from '../components/Button/ImageButton';
 import MetaMaskOnboarding from '@metamask/onboarding';
 const forwarderOrigin = 'http://localhost:19006';
 
-const isMetaMaskInstalled = () => {
-  //Have to check the ethereum binding on the window object to see if it's installed
-  const { ethereum } = window;
-  return Boolean(ethereum && ethereum.isMetaMask);
-};
-
-function MetaMaskConnect() {
-  //Now we check to see if Metmask is installed
-  if (!isMetaMaskInstalled()) {
-      onboarding.startOnboarding();
-      
-  } else {
-      try {
-          // Will open the MetaMask UI
-          // You should disable this button while the request is pending!
-          ethereum.request({ method: 'eth_requestAccounts' });
-      } catch (error) {
-          console.error(error);
-      }
-  }
-};
-
 const LinearGradient = require('expo-linear-gradient').LinearGradient ;
 
 const windowWidth = Dimensions.get('screen').width;
@@ -112,6 +90,52 @@ function Content() {
 
 export default function Auth(props) {
 
+  let onboarding;
+  let accounts;
+  let piggybankContract;
+  onboarding = new MetaMaskOnboarding({ forwarderOrigin })
+
+  const isMetaMaskConnected = () => accounts && accounts.length > 0
+
+  const isMetaMaskInstalled = () => {
+    //Have to check the ethereum binding on the window object to see if it's installed
+    const { ethereum } = window;
+    return Boolean(ethereum && ethereum.isMetaMask);
+  };
+
+  function handleNewAccounts (newAccounts) {
+    accounts = newAccounts;
+    console.log('as',accounts)
+  }
+
+  function MetaMaskConnect() {
+    accounts = ethereum.request({
+      method: 'eth_accounts',
+    })
+    
+    //Now we check to see if Metmask is installed
+    if (!isMetaMaskInstalled()) {
+      onboarding.startOnboarding();
+    } else if (isMetaMaskConnected()) {
+      if (onboarding) {
+        onboarding.stopOnboarding()
+      }
+      
+    } else {
+      try {
+        const newAccounts = ethereum.request({
+          method: 'eth_requestAccounts',
+        })
+        accounts = newAccounts;
+        console.log('account',accounts)
+        {props.onPageChanged('Main')}
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+  };
+
   function onMetaMaskConnect()
   {
     MetaMaskConnect();
@@ -170,7 +194,7 @@ export default function Auth(props) {
             alignSelf="center"/>
             {isMetaMaskInstalled()?
             <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
-              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}  onMetaMaskConnect={onMetaMaskConnect} onPageChanged={props.onPageChanged}/>
+              <ImageButton label={"MetaMask"} btnimg={require('../assets/icons/metamask.svg')}  onMetaMaskConnect={onMetaMaskConnect}/>
             </View>
             :
             <View px={["3","5","7","10"]} py={["5","5","5","10"]}> 
@@ -179,7 +203,6 @@ export default function Auth(props) {
               <View mb={["5","5","5","10"]}> <ImageButton label={"Fortmatic"} btnimg={require('../assets/icons/fortmatic.svg')}/> </View>
             </View>
             }
-            {/* onPress={metamaskConnectable==true?MetaMaskConnect():null} */}
             
           </Box>
           <View flexDirection={"row"} justifyContent={"center"} 

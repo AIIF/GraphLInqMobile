@@ -23,7 +23,7 @@ const MoreButton = (props: any) => {
         }}>
         {props.menuItems.map((element : any) => {
           return (
-            <Menu.Item flexDirection={"row"} >
+            <Menu.Item flexDirection={"row"} key={element.name}>
               <Icon size="md" as={Ionicons} name={element.name} color="rgb(56,8,255)" />
               <Text color="rgb(136,127,164)"> {element.desc}</Text> 
             </Menu.Item>

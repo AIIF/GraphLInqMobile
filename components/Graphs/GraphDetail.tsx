@@ -34,22 +34,27 @@ const graphDetails = {
     ],
     templateParams: [
         {
+            id:"1",
             title: 'Watch Interval (in seconds)',
             value: '300'
         },
         {
+            id:"2",
             title: 'Symbol to watch',
             value: 'bitcoin'
         },
         {
+            id:"3",
             title: 'Log Message',
             value: 'Bitcoin price is {0}$ for 24h change of {1}'
         },
         {
+            id:"4",
             title: 'Message variable (Price)',
             value: '{0}'
         },
         {
+            id:"5",
             title: 'Message variable (MarketCap Change 24h)',
             value: '{1}'
         },
@@ -64,7 +69,7 @@ const graphDetail = (props:any) => {
             <Text color="rgb(136,127,164)" fontSize={"lg"} mb="3">Description: {graphDetails.description[props.templateID]}</Text>
             {graphDetails.templateParams.map((element) => {
                 return (
-                    <VStack mb="3">
+                    <VStack mb="3" key={element.id}>
                         <FormControl isRequired>
                             <FormControl.Label color="rgb(136,127,164)" fontSize={"lg"}>{element.title}</FormControl.Label>
                             <Input variant={"underlined"} color="rgb(136,127,164)" fontSize={"md"} value={element.value} />

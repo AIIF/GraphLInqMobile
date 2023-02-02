@@ -84,7 +84,7 @@ const graphs = (props: any) => {
             <Modal.Header bg="rgb(32,27,64)" borderColor={"transparent"}><Text color="rgb(136,127,164)" fontSize={"lg"}>More</Text></Modal.Header>
             <Modal.Body bg="darkBlue.900">
               {menuItems.map((item) => {
-                return <Pressable> 
+                return <Pressable key={item.name}> 
                 {({isPressed}) => {
                   return <Box m="2" flexDirection={"row"} justifyContent="left" px="2" alignItems={"center"}>
                     <Icon as={Ionicons} name={item.name} size="sm" color={item.color}/>

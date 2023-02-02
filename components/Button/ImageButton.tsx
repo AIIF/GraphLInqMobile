@@ -11,7 +11,6 @@ const ImageButton: React.FC = (
         <Pressable  onPress={() => {
             setPressed(true);
             props.onMetaMaskConnect();
-            props.onPageChanged('Main');
         }}>
             {({isHovered, isPressed,isFocused}) => {
                 return <LinearGradient
